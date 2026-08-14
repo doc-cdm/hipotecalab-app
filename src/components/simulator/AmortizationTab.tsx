@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { TabProps, AmortizationRow } from '../../types/simulation';
+import { TabProps } from '../../types/simulation';
 import { formatCurrency } from '../../utils/formatters';
 import { generateAmortizationTable, calculateTotalInvestment } from '../../utils/calculations';
 

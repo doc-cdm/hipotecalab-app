@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Trophy, Award, Star, Target, Zap, Flame, Rocket, Activity, BadgeCheck } from 'lucide-react';
+import { Trophy, Award, Star, Target, Zap, Flame, Rocket, Activity, BadgeCheck, type LucideIcon } from 'lucide-react';
 
 // Solo Quiz
 interface BaseQuestion { id: string; dificultad: 'facil' | 'media' | 'dificil'; explicacion?: string; }
@@ -11,7 +11,7 @@ interface Achievement {
   id: string;
   nombre: string;
   descripcion: string;
-  icono: any;
+  icono: LucideIcon;
   condicion: (progress: ProgressState) => boolean;
   desbloqueado?: boolean;
 }
@@ -987,6 +987,12 @@ const dificultadMultiplicador = (d: Question['dificultad']) => d === 'facil' ? 1
 const calcularNivel = (xp: number) => Math.floor(xp / 1000) + 1;
 const initialProgress: ProgressState = { xp: 0, nivel: 1, streak: 0, respondidas: 0, aciertos: 0, historico: [], logros: [], preguntasUsadas: [] };
 
+const selectQuestion = (usedQuestionIds: string[]): Question | null => {
+  const unusedQuestions = banco.filter((question) => !usedQuestionIds.includes(question.id));
+  const availableQuestions = unusedQuestions.length > 0 ? unusedQuestions : banco;
+  return availableQuestions[Math.floor(Math.random() * availableQuestions.length)] ?? null;
+};
+
 const Learning: React.FC = () => {
   const [progress, setProgress] = useState<ProgressState>(() => { 
     try { 
@@ -998,7 +1004,7 @@ const Learning: React.FC = () => {
       return initialProgress; 
     } 
   });
-  const [preguntaActual, setPreguntaActual] = useState<Question | null>(null);
+  const [preguntaActual, setPreguntaActual] = useState<Question | null>(() => selectQuestion(progress.preguntasUsadas));
   const [respuestaUsuario, setRespuestaUsuario] = useState<number | null>(null);
   const [resultado, setResultado] = useState<{ correcta: boolean; puntos: number; mensaje: string } | null>(null);
   const [mostrarExplicacion, setMostrarExplicacion] = useState(false);
@@ -1025,12 +1031,8 @@ const Learning: React.FC = () => {
       setProgress(prev => ({ ...prev, preguntasUsadas: [] }));
     }
 
-    const idx = Math.floor(Math.random() * preguntasDisponibles.length);
-    setPreguntaActual(preguntasDisponibles[idx]);
+    setPreguntaActual(selectQuestion(progress.preguntasUsadas));
   };
-
-  // Solo cargar la primera pregunta al montar
-  useEffect(() => { nuevaPregunta(); }, []);
 
   const registrarResultado = (correcta: boolean, puntosBase: number) => {
     const streak = correcta ? progress.streak + 1 : 0;
@@ -1185,7 +1187,7 @@ const Learning: React.FC = () => {
         </div>
         <div className="bg-slate-800/60 border border-slate-700 rounded-lg p-4 flex flex-col">
           <span className="text-xs font-medium text-slate-400">Histórico (últ. 10)</span>
-          <div className="mt-2 flex flex-wrap gap-1">{progress.historico.slice(-10).map(h => <span key={h.id+Math.random()} className={`w-3 h-3 rounded-sm ${h.correcta ? 'bg-green-500' : 'bg-red-500'}`}></span>)}</div>
+          <div className="mt-2 flex flex-wrap gap-1">{progress.historico.slice(-10).map((entry, index) => <span key={`${entry.id}-${index}`} className={`w-3 h-3 rounded-sm ${entry.correcta ? 'bg-green-500' : 'bg-red-500'}`}></span>)}</div>
           <button onClick={() => { if (confirm('¿Reiniciar progreso?')) setProgress(initialProgress); }} className="mt-auto text-[10px] text-slate-400 underline hover:text-orange-400">Reiniciar</button>
         </div>
       </div>

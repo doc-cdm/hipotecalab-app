@@ -10,29 +10,18 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
   </React.StrictMode>,
 );
 
-// Preload chunks when idle: main menu sections and heavy vendors
-if ('requestIdleCallback' in window) {
-  // @ts-ignore
-  requestIdleCallback(async () => {
-    try {
-      // Pre-cargar iconos (pequeños) y dividir vendors ya configurados
-      await Promise.all([
-        import('./components/Simulator'),
-        import('./components/Viability'),
-        import('./components/Resources'),
-        import('./components/Learning'),
-      ]);
-    } catch (e) {
-      // Ignorar errores de preload
-    }
-  }, { timeout: 2500 });
+const preloadSections = () => Promise.all([
+  import('./components/Simulator'),
+  import('./components/Viability'),
+  import('./components/Resources'),
+  import('./components/Learning'),
+]);
+
+// Warm up lazy chunks when the browser is idle without delaying first render.
+const scheduleWhenIdle = (window as Partial<Window>).requestIdleCallback;
+
+if (scheduleWhenIdle) {
+  scheduleWhenIdle(() => void preloadSections().catch(() => undefined), { timeout: 2500 });
 } else {
-  setTimeout(() => {
-    Promise.all([
-      import('./components/Simulator'),
-      import('./components/Viability'),
-      import('./components/Resources'),
-      import('./components/Learning'),
-    ]).catch(() => { });
-  }, 2500);
+  globalThis.setTimeout(() => void preloadSections().catch(() => undefined), 2500);
 }

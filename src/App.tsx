@@ -1,4 +1,4 @@
-import { useState, useEffect, Suspense, lazy } from 'react';
+import { useState, Suspense, lazy } from 'react';
 import { Calculator, TrendingUp, BookOpen, Menu, Home, Shield, FileText, Brain, ChevronDown, MessageCircle, Scale } from 'lucide-react';
 import PrivacyPolicyModal from './components/PrivacyPolicyModal';
 import TermsOfUseModal from './components/TermsOfUseModal';
@@ -63,11 +63,6 @@ function App() {
   const [isPrivacyModalOpen, setIsPrivacyModalOpen] = useState(false);
   const [isTermsModalOpen, setIsTermsModalOpen] = useState(false);
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
-
-  // Reset showButtons when navigating away from home
-  useEffect(() => {
-    // Nothing needed now that auth is removed
-  }, [activeSection]);
 
   const sections = [
     { id: 'simulator' as Section, label: 'Simulador', icon: Calculator, color: 'orange', description: 'Juega con intereses, plazo y entrada' },

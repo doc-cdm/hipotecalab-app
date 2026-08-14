@@ -2,6 +2,14 @@
 import { SimulationData } from '../types/simulation';
 import { formatCurrency, formatPercentage } from './formatters';
 import { calculateTotalInvestment } from './calculations';
+import type { jsPDF as JsPdfDocument } from 'jspdf';
+
+type AutoTableDocument = JsPdfDocument & {
+  lastAutoTable?: { finalY?: number };
+};
+
+const getLastTableY = (doc: AutoTableDocument, fallback: number): number =>
+  doc.lastAutoTable?.finalY ?? fallback;
 
 export const exportToPDF = async (simulationData: SimulationData) => {
   const { default: jsPDF } = await import('jspdf');
@@ -12,7 +20,7 @@ export const exportToPDF = async (simulationData: SimulationData) => {
   doc.setProperties({
     title: 'Simulación Hipotecaria',
     subject: 'Resumen y detalles de la simulación hipotecaria',
-    creator: 'Balma Mortgage Playground',
+    creator: 'HipotecaLab',
   });
 
   const pageWidth = doc.internal.pageSize.getWidth();
@@ -81,7 +89,8 @@ export const exportToPDF = async (simulationData: SimulationData) => {
     columnStyles: { 0: { cellWidth: 90 } },
   });
 
-  let yPos = (doc as any).lastAutoTable?.finalY ? (doc as any).lastAutoTable.finalY + 8 : 40;
+  const tableDoc = doc as AutoTableDocument;
+  let yPos = getLastTableY(tableDoc, 32) + 8;
 
   // Información del Inmueble
   sectionTitle('Información del Inmueble', yPos);
@@ -103,7 +112,7 @@ export const exportToPDF = async (simulationData: SimulationData) => {
     alternateRowStyles: { fillColor: [248, 248, 248] },
   });
 
-  yPos = (doc as any).lastAutoTable.finalY + 8;
+  yPos = getLastTableY(tableDoc, yPos) + 8;
 
   // Condiciones del Préstamo
   sectionTitle('Condiciones del Préstamo', yPos);
@@ -124,7 +133,7 @@ export const exportToPDF = async (simulationData: SimulationData) => {
     alternateRowStyles: { fillColor: [248, 248, 248] },
   });
 
-  yPos = (doc as any).lastAutoTable.finalY + 8;
+  yPos = getLastTableY(tableDoc, yPos) + 8;
 
   // Información de Cuotas
   sectionTitle('Información de Cuotas', yPos);
@@ -145,7 +154,7 @@ export const exportToPDF = async (simulationData: SimulationData) => {
     alternateRowStyles: { fillColor: [248, 248, 248] },
   });
 
-  yPos = (doc as any).lastAutoTable.finalY + 8;
+  yPos = getLastTableY(tableDoc, yPos) + 8;
 
   // Desglose de Costes (si existen)
   if (simulationData.costs && Object.keys(simulationData.costs).length > 0) {
@@ -176,7 +185,7 @@ export const exportToPDF = async (simulationData: SimulationData) => {
       alternateRowStyles: { fillColor: [248, 248, 248] },
     });
 
-    yPos = (doc as any).lastAutoTable.finalY + 8;
+    yPos = getLastTableY(tableDoc, yPos) + 8;
   }
 
   // Notas / Aclaraciones
@@ -190,10 +199,7 @@ export const exportToPDF = async (simulationData: SimulationData) => {
   const notesText = notes
     .map((n) => n)
     .join('\n');
-  const wrapped = (doc as any).splitTextToSize
-    ? (doc as any).splitTextToSize(notesText, pageWidth - marginLeft - marginRight)
-    : notesText;
-  // @ts-ignore splitTextToSize no tipado en tipos de jsPDF
+  const wrapped = doc.splitTextToSize(notesText, pageWidth - marginLeft - marginRight);
   doc.text(wrapped, marginLeft, yPos + 6);
 
   // Amortización (página nueva)
@@ -226,15 +232,15 @@ export const exportToPDF = async (simulationData: SimulationData) => {
       doc.text(
         `Mostrando las primeras 50 cuotas de ${simulationData.amortizationTable.length} totales`,
         20,
-        Math.min(((doc as any).lastAutoTable?.finalY || 270) + 8, pageHeight - 15)
+        Math.min(getLastTableY(tableDoc, 270) + 8, pageHeight - 15)
       );
     }
   }
 
   // Footer: numeración de páginas
-  const totalPages = (doc as any).getNumberOfPages ? (doc as any).getNumberOfPages() : 1;
+  const totalPages = doc.getNumberOfPages();
   for (let i = 1; i <= totalPages; i++) {
-    (doc as any).setPage(i);
+    doc.setPage(i);
     doc.setFontSize(9);
     doc.setTextColor(150);
     const w = doc.internal.pageSize.getWidth();
@@ -263,7 +269,7 @@ export const exportToExcel = async (simulationData: SimulationData) => {
   const wb = XLSX.utils.book_new();
 
   // Summary sheet
-  const summaryData = [
+  const summaryData: Array<Array<string | number>> = [
     ['SIMULACIÓN HIPOTECARIA'],
     ['Fecha:', new Date().toLocaleDateString('es-ES')],
     [''],
@@ -290,12 +296,12 @@ export const exportToExcel = async (simulationData: SimulationData) => {
   const summaryWs = XLSX.utils.aoa_to_sheet(summaryData);
   
   // Format currency and percentage columns
-  const range = XLSX.utils.decode_range((summaryWs as any)['!ref'] || 'A1');
+  const range = XLSX.utils.decode_range(summaryWs['!ref'] || 'A1');
   for (let r = range.s.r; r <= range.e.r; r++) {
     const cellB = XLSX.utils.encode_cell({ r, c: 1 });
-    const cell: any = (summaryWs as any)[cellB];
+    const cell = summaryWs[cellB];
     if (cell && typeof cell.v === 'number') {
-      const labelRow = summaryData[r] as any[] | undefined;
+      const labelRow = summaryData[r];
       const label = Array.isArray(labelRow) && labelRow[0] ? String(labelRow[0]).toLowerCase() : '';
       if (label.includes('precio') || label.includes('coste') || label.includes('aportación') || 
           label.includes('financiación') || label.includes('cuota') || label.includes('intereses')) {
@@ -324,10 +330,10 @@ export const exportToExcel = async (simulationData: SimulationData) => {
     const costsWs = XLSX.utils.aoa_to_sheet(costsData);
     
     // Format currency columns
-    const costsRange = XLSX.utils.decode_range((costsWs as any)['!ref'] || 'A1');
+    const costsRange = XLSX.utils.decode_range(costsWs['!ref'] || 'A1');
     for (let r = 3; r <= costsRange.e.r; r++) {
       const cellB = XLSX.utils.encode_cell({ r, c: 1 });
-      const cell: any = (costsWs as any)[cellB];
+      const cell = costsWs[cellB];
       if (cell && typeof cell.v === 'number') {
         cell.z = '"€"#,##0.00';
       }
@@ -355,11 +361,11 @@ export const exportToExcel = async (simulationData: SimulationData) => {
     const amortizationWs = XLSX.utils.aoa_to_sheet(amortizationData);
     
     // Format currency columns
-    const amortRange = XLSX.utils.decode_range((amortizationWs as any)['!ref'] || 'A1');
+    const amortRange = XLSX.utils.decode_range(amortizationWs['!ref'] || 'A1');
     for (let r = 3; r <= amortRange.e.r; r++) {
       for (let c = 2; c <= 5; c++) { // Columns C through F
         const cellRef = XLSX.utils.encode_cell({ r, c });
-        const cell: any = (amortizationWs as any)[cellRef];
+        const cell = amortizationWs[cellRef];
         if (cell && typeof cell.v === 'number') {
           cell.z = '"€"#,##0.00';
         }

@@ -27,7 +27,8 @@ const AmortizationTab: React.FC<TabProps> = ({
         monthlyInterestRate,
         numberOfPayments,
         simulationData.monthlyPayment,
-        simulationData.startDate
+        simulationData.startDate,
+        simulationData.monthlyExtras
       );
 
       setSimulationData(prev => ({
@@ -35,7 +36,7 @@ const AmortizationTab: React.FC<TabProps> = ({
         amortizationTable
       }));
     }
-  }, [simulationData.monthlyPayment, simulationData.propertyPrice, simulationData.costs, simulationData.initialContribution, simulationData.tin, simulationData.loanTerm, simulationData.startDate, setSimulationData]);
+  }, [simulationData.monthlyPayment, simulationData.monthlyExtras, simulationData.propertyPrice, simulationData.costs, simulationData.initialContribution, simulationData.tin, simulationData.loanTerm, simulationData.startDate, setSimulationData]);
 
   const hasData = simulationData.amortizationTable.length > 0;
 

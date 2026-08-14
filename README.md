@@ -30,14 +30,14 @@ La aplicación está disponible como web y PWA, y cuenta con proyectos nativos p
 - Vite
 - Tailwind CSS
 - Capacitor 8
-- jsPDF y SheetJS (`xlsx`)
+- jsPDF y `write-excel-file`
 - Lucide React
 
 ## Instalación
 
 ### Requisitos
 
-- Node.js y npm
+- Node.js 22.12 o posterior y npm
 - Android Studio para ejecutar la app Android
 - Xcode para ejecutar la app iOS
 
@@ -99,6 +99,9 @@ npm run ios
 | `npm run build` | Genera la compilación web de producción. |
 | `npm run preview` | Sirve localmente la compilación de producción. |
 | `npm run lint` | Ejecuta ESLint sobre el proyecto. |
+| `npm run typecheck` | Comprueba los tipos TypeScript sin generar archivos. |
+| `npm run test` | Ejecuta las pruebas automatizadas con Vitest. |
+| `npm run check` | Ejecuta lint, tipos, pruebas y compilación. |
 | `npm run cap:sync` | Sincroniza la web y los plugins con Android e iOS. |
 | `npm run cap:open:ios` | Abre el proyecto nativo en Xcode. |
 | `npm run ios` | Compila, sincroniza y abre la app iOS. |
@@ -112,10 +115,15 @@ hipotecalab-app/
 ├── public/                  # Manifest, service worker y recursos PWA
 ├── resources/               # Recursos fuente de iconos y splash
 ├── src/
-│   ├── components/          # Pantallas y componentes React
-│   │   └── simulator/       # Pestañas del simulador hipotecario
+│   ├── app/                 # Navegación y composición de la aplicación
+│   ├── features/            # Funcionalidades agrupadas por dominio
+│   │   ├── learning/        # Quiz, progreso, preguntas y logros
+│   │   ├── resources/       # Diccionario y guía de compra
+│   │   ├── simulator/       # Simulador, estado, pestañas y exportadores
+│   │   └── viability/       # Análisis de viabilidad y modelo fiscal
+│   ├── shared/              # Componentes y utilidades reutilizables
 │   ├── types/               # Tipos del dominio
-│   └── utils/               # Cálculos, formatos y exportaciones
+│   └── utils/               # Cálculos y formatos financieros
 ├── capacitor.config.ts      # Configuración de la app nativa
 └── vite.config.ts           # Configuración de la aplicación web
 ```

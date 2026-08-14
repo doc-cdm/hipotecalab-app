@@ -1,43 +1,15 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { TabProps } from '../../types/simulation';
 import { formatCurrency } from '../../utils/formatters';
-import { generateAmortizationTable, calculateTotalInvestment } from '../../utils/calculations';
 
 const AmortizationTab: React.FC<TabProps> = ({ 
   simulationData, 
-  setSimulationData, 
   onNext, 
   onPrev, 
   canGoNext, 
   canGoPrev 
 }) => {
-  useEffect(() => {
-    if (simulationData.monthlyPayment > 0) {
-      const totalInvestment = calculateTotalInvestment(
-        simulationData.propertyPrice,
-        simulationData.costs
-      );
-      const principal = totalInvestment - simulationData.initialContribution;
-      const monthlyInterestRate = simulationData.tin / 100 / 12;
-      const numberOfPayments = simulationData.loanTerm * 12;
-
-      const amortizationTable = generateAmortizationTable(
-        principal,
-        monthlyInterestRate,
-        numberOfPayments,
-        simulationData.monthlyPayment,
-        simulationData.startDate,
-        simulationData.monthlyExtras
-      );
-
-      setSimulationData(prev => ({
-        ...prev,
-        amortizationTable
-      }));
-    }
-  }, [simulationData.monthlyPayment, simulationData.monthlyExtras, simulationData.propertyPrice, simulationData.costs, simulationData.initialContribution, simulationData.tin, simulationData.loanTerm, simulationData.startDate, setSimulationData]);
-
   const hasData = simulationData.amortizationTable.length > 0;
 
   return (

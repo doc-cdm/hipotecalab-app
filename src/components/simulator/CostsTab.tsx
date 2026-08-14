@@ -1,36 +1,26 @@
 import React from 'react';
 import { ChevronRight } from 'lucide-react';
 import { TabProps } from '../../types/simulation';
+import type { CostBreakdown } from '../../types/simulation';
 import { formatCurrency } from '../../utils/formatters';
 import { calculateTotalInvestment } from '../../utils/calculations';
 import HelpTooltip from '../HelpTooltip';
 
 const CostsTab: React.FC<TabProps> = ({ 
   simulationData, 
-  setSimulationData, 
+  updateSimulation,
+  updateCosts,
   onNext, 
   canGoNext 
 }) => {
   const handleInputChange = (field: string, value: string | number) => {
     if (field === 'name') {
-      setSimulationData(prev => ({
-        ...prev,
-        name: typeof value === 'string' ? value : String(value)
-      }));
+      updateSimulation({ name: typeof value === 'string' ? value : String(value) });
     } else if (field.startsWith('costs.')) {
-      const costField = field.split('.')[1];
-      setSimulationData(prev => ({
-        ...prev,
-        costs: {
-          ...prev.costs,
-          [costField]: typeof value === 'string' ? parseFloat(value) || 0 : value
-        }
-      }));
+      const costField = field.split('.')[1] as keyof CostBreakdown;
+      updateCosts({ [costField]: typeof value === 'string' ? parseFloat(value) || 0 : value });
     } else {
-      setSimulationData(prev => ({
-        ...prev,
-        [field]: typeof value === 'string' ? parseFloat(value) || 0 : value
-      }));
+      updateSimulation({ propertyPrice: typeof value === 'string' ? parseFloat(value) || 0 : value });
     }
   };
 

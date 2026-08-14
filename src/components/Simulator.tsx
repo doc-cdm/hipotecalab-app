@@ -4,32 +4,13 @@ import LoanTab from './simulator/LoanTab';
 import PaymentTab from './simulator/PaymentTab';
 import AmortizationTab from './simulator/AmortizationTab';
 import SummaryTab from './simulator/SummaryTab';
-import { SimulationData } from '../types/simulation';
+import { useSimulation } from '../features/simulator/useSimulation';
 
 type Tab = 'costs' | 'loan' | 'payment' | 'amortization' | 'summary';
 
 const Simulator: React.FC = () => {
   const [activeTab, setActiveTab] = useState<Tab>('costs');
-  const [simulationData, setSimulationData] = useState<SimulationData>({
-    name: '',
-    propertyPrice: 0,
-    costs: {
-      appraisal: 350,
-      notary: 1200,
-      agency: 500,
-      registry: 600,
-      taxRate: 10
-    },
-    initialContribution: 0,
-    tin: 0,
-    tae: 0,
-    startDate: new Date().toISOString().split('T')[0],
-    loanTerm: 25,
-    monthlyExtras: 0,
-    monthlyPayment: 0,
-    monthlyPaymentWithExtras: 0,
-    amortizationTable: []
-  });
+  const { simulationData, updateSimulation, updateCosts } = useSimulation();
 
   const tabs = [
     { id: 'costs' as Tab, label: 'Costes' },
@@ -60,7 +41,8 @@ const Simulator: React.FC = () => {
   const renderActiveTab = () => {
     const props = {
       simulationData,
-      setSimulationData,
+      updateSimulation,
+      updateCosts,
       onNext: goNext,
       onPrev: goPrev,
       canGoNext: canGoNext(),

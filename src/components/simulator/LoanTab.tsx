@@ -1,29 +1,23 @@
 import React from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { TabProps } from '../../types/simulation';
+import { TabProps, type SimulationInputs } from '../../types/simulation';
 import { formatCurrency } from '../../utils/formatters';
 import { calculateTotalInvestment } from '../../utils/calculations';
 import HelpTooltip from '../HelpTooltip';
 
 const LoanTab: React.FC<TabProps> = ({ 
   simulationData, 
-  setSimulationData, 
+  updateSimulation,
   onNext, 
   onPrev, 
   canGoNext, 
   canGoPrev 
 }) => {
-  const handleInputChange = (field: string, value: string | number) => {
+  const handleInputChange = (field: keyof SimulationInputs, value: string | number) => {
     if (field === 'startDate') {
-      setSimulationData(prev => ({
-        ...prev,
-        [field]: typeof value === 'string' ? value : String(value)
-      }));
+      updateSimulation({ startDate: typeof value === 'string' ? value : String(value) });
     } else {
-      setSimulationData(prev => ({
-        ...prev,
-        [field]: typeof value === 'string' ? parseFloat(value) || 0 : value
-      }));
+      updateSimulation({ [field]: typeof value === 'string' ? parseFloat(value) || 0 : value });
     }
   };
 

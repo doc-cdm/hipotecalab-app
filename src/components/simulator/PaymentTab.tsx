@@ -1,36 +1,16 @@
 import React from 'react';
-import { ChevronLeft, ChevronRight, Calculator } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { TabProps } from '../../types/simulation';
 import { formatCurrency } from '../../utils/formatters';
-import { calculateMonthlyPayment, calculateTotalInvestment } from '../../utils/calculations';
+import { calculateTotalInvestment } from '../../utils/calculations';
 
 const PaymentTab: React.FC<TabProps> = ({ 
   simulationData, 
-  setSimulationData, 
   onNext, 
   onPrev, 
   canGoNext, 
   canGoPrev 
 }) => {
-  const handleCalculatePayment = () => {
-    const totalInvestment = calculateTotalInvestment(
-      simulationData.propertyPrice,
-      simulationData.costs
-    );
-    const principal = totalInvestment - simulationData.initialContribution;
-    const monthlyInterestRate = simulationData.tin / 100 / 12;
-    const numberOfPayments = simulationData.loanTerm * 12;
-
-    const monthlyPayment = calculateMonthlyPayment(principal, monthlyInterestRate, numberOfPayments);
-    const monthlyPaymentWithExtras = monthlyPayment + simulationData.monthlyExtras;
-
-    setSimulationData(prev => ({
-      ...prev,
-      monthlyPayment,
-      monthlyPaymentWithExtras
-    }));
-  };
-
   const isCalculated = simulationData.monthlyPayment > 0;
 
   return (
@@ -58,17 +38,6 @@ const PaymentTab: React.FC<TabProps> = ({
                 {formatCurrency(simulationData.monthlyPaymentWithExtras)}
               </div>
             </div>
-          </div>
-
-          {/* Calculate Button */}
-          <div className="text-center">
-            <button
-              onClick={handleCalculatePayment}
-              className="inline-flex items-center space-x-2 px-8 py-3 bg-orange-500 hover:bg-orange-600 text-white font-medium rounded-md transition-colors"
-            >
-              <Calculator size={20} />
-              <span>Calcular cuota</span>
-            </button>
           </div>
 
           {/* Summary Information */}

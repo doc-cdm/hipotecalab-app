@@ -23,7 +23,7 @@ export interface ViabilitySpecificData {
   type: 'viability';
 }
 
-export interface SimulationData {
+export interface SimulationInputs {
   name: string;
   propertyPrice: number;
   costs: CostBreakdown;
@@ -33,25 +33,25 @@ export interface SimulationData {
   startDate: string;
   loanTerm: number;
   monthlyExtras: number;
+}
+
+export interface SimulationResults {
   monthlyPayment: number;
   monthlyPaymentWithExtras: number;
   amortizationTable: AmortizationRow[];
-  viabilityData?: ViabilitySpecificData; // Datos opcionales para análisis de viabilidad
 }
+
+export type SimulationData = SimulationInputs & SimulationResults;
+
+export type UpdateSimulation = (patch: Partial<SimulationInputs>) => void;
+export type UpdateCosts = (patch: Partial<CostBreakdown>) => void;
 
 export interface TabProps {
   simulationData: SimulationData;
-  setSimulationData: React.Dispatch<React.SetStateAction<SimulationData>>;
+  updateSimulation: UpdateSimulation;
+  updateCosts: UpdateCosts;
   onNext: () => void;
   onPrev: () => void;
   canGoNext: boolean;
   canGoPrev: boolean;
-}
-
-export interface SavedSimulation {
-  id?: string;
-  userId: string;
-  name: string;
-  data: SimulationData;
-  createdAt: Date | string;
 }

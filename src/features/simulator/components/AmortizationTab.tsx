@@ -1,7 +1,7 @@
 import React from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { TabProps } from '../../types/simulation';
-import { formatCurrency } from '../../utils/formatters';
+import { TabProps } from '../../../types/simulation';
+import { formatCurrency } from '../../../utils/formatters';
 
 const AmortizationTab: React.FC<TabProps> = ({ 
   simulationData, 

@@ -11,10 +11,10 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
 );
 
 const preloadSections = () => Promise.all([
-  import('./components/Simulator'),
-  import('./components/Viability'),
-  import('./components/Resources'),
-  import('./components/Learning'),
+  import('./features/simulator/Simulator'),
+  import('./features/viability/Viability'),
+  import('./features/resources/Resources'),
+  import('./features/learning/Learning'),
 ]);
 
 // Warm up lazy chunks when the browser is idle without delaying first render.

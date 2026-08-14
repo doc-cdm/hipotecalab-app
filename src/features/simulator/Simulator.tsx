@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import CostsTab from './simulator/CostsTab';
-import LoanTab from './simulator/LoanTab';
-import PaymentTab from './simulator/PaymentTab';
-import AmortizationTab from './simulator/AmortizationTab';
-import SummaryTab from './simulator/SummaryTab';
-import { useSimulation } from '../features/simulator/useSimulation';
+import CostsTab from './components/CostsTab';
+import LoanTab from './components/LoanTab';
+import PaymentTab from './components/PaymentTab';
+import AmortizationTab from './components/AmortizationTab';
+import SummaryTab from './components/SummaryTab';
+import { useSimulation } from './useSimulation';
 
 type Tab = 'costs' | 'loan' | 'payment' | 'amortization' | 'summary';
 

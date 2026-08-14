@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import { useState, type FC } from 'react';
 import { Calculator } from 'lucide-react';
-import { formatCurrency, formatPercentage } from '../utils/formatters';
-import { calculateMaximumLoan } from '../utils/calculations';
-import HelpTooltip from './HelpTooltip';
+import { formatCurrency, formatPercentage } from '../../utils/formatters';
+import { calculateMaximumLoan } from '../../utils/calculations';
+import HelpTooltip from '../../components/HelpTooltip';
 
 interface ViabilityData {
   monthlyNetIncome: number;
@@ -36,7 +36,7 @@ const ITP_RATES: Record<string, number> = {
   'País Vasco': 7
 };
 
-const Viability: React.FC = () => {
+const Viability: FC = () => {
   const [data, setData] = useState<ViabilityData>({
     monthlyNetIncome: 0,
     debtRatio: 30,

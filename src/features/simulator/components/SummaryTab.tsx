@@ -1,8 +1,8 @@
 import React from 'react';
 import { ChevronLeft, FileDown, Sheet } from 'lucide-react';
-import { TabProps } from '../../types/simulation';
-import { formatCurrency, formatPercentage } from '../../utils/formatters';
-import { calculateTotalInvestment } from '../../utils/calculations';
+import { TabProps } from '../../../types/simulation';
+import { formatCurrency, formatPercentage } from '../../../utils/formatters';
+import { calculateTotalInvestment } from '../../../utils/calculations';
 
 const SummaryTab: React.FC<TabProps> = ({
   simulationData,
@@ -36,7 +36,7 @@ const SummaryTab: React.FC<TabProps> = ({
 
   const handleExportPDF = async () => {
     try {
-      const { exportToPDF } = await import('../../utils/exportUtils');
+      const { exportToPDF } = await import('../../../utils/exportUtils');
       await exportToPDF(simulationData);
     } catch (error) {
       console.error('Error al exportar PDF:', error);
@@ -46,7 +46,7 @@ const SummaryTab: React.FC<TabProps> = ({
 
   const handleExportExcel = async () => {
     try {
-      const { exportToExcel } = await import('../../utils/exportUtils');
+      const { exportToExcel } = await import('../../../utils/exportUtils');
       await exportToExcel(simulationData);
     } catch (error) {
       console.error('Error al exportar Excel:', error);

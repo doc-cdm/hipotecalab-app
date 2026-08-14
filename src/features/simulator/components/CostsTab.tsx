@@ -1,10 +1,10 @@
 import React from 'react';
 import { ChevronRight } from 'lucide-react';
-import { TabProps } from '../../types/simulation';
-import type { CostBreakdown } from '../../types/simulation';
-import { formatCurrency } from '../../utils/formatters';
-import { calculateTotalInvestment } from '../../utils/calculations';
-import HelpTooltip from '../HelpTooltip';
+import { TabProps } from '../../../types/simulation';
+import type { CostBreakdown } from '../../../types/simulation';
+import { formatCurrency } from '../../../utils/formatters';
+import { calculateTotalInvestment } from '../../../utils/calculations';
+import HelpTooltip from '../../../components/HelpTooltip';
 
 const CostsTab: React.FC<TabProps> = ({ 
   simulationData, 

@@ -1,8 +1,8 @@
 import React from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { TabProps } from '../../types/simulation';
-import { formatCurrency } from '../../utils/formatters';
-import { calculateTotalInvestment } from '../../utils/calculations';
+import { TabProps } from '../../../types/simulation';
+import { formatCurrency } from '../../../utils/formatters';
+import { calculateTotalInvestment } from '../../../utils/calculations';
 
 const PaymentTab: React.FC<TabProps> = ({ 
   simulationData, 

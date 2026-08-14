@@ -4,10 +4,10 @@ import PrivacyPolicyModal from './components/PrivacyPolicyModal';
 import TermsOfUseModal from './components/TermsOfUseModal';
 
 // Carga perezosa de secciones pesadas para reducir JS inicial
-const Simulator = lazy(() => import('./components/Simulator'));
-const Viability = lazy(() => import('./components/Viability'));
-const Resources = lazy(() => import('./components/Resources'));
-const Learning = lazy(() => import('./components/Learning'));
+const Simulator = lazy(() => import('./features/simulator/Simulator'));
+const Viability = lazy(() => import('./features/viability/Viability'));
+const Resources = lazy(() => import('./features/resources/Resources'));
+const Learning = lazy(() => import('./features/learning/Learning'));
 
 type Section = 'simulator' | 'viability' | 'resources' | 'learning' | 'home' | 'main-menu';
 

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SVG to PNG Converter</title>
+</head>
+<body>
+    <h1>Convertir SVG a PNG</h1>
+    <div id="container"></div>
+    
+    <script>
+        const sizes = [72, 96, 128, 144, 152, 192, 384, 512];
+        
+        function svgToPng(svgData, size, filename) {
+            const canvas = document.createElement('canvas');
+            canvas.width = size;
+            canvas.height = size;
+            const ctx = canvas.getContext('2d');
+            
+            const img = new Image();
+            img.onload = function() {
+                ctx.drawImage(img, 0, 0);
+                
+                // Crear enlace de descarga
+                const link = document.createElement('a');
+                link.download = filename;
+                link.href = canvas.toDataURL('image/png');
+                link.textContent = `Descargar ${filename}`;
+                link.style.display = 'block';
+                link.style.margin = '5px';
+                document.getElementById('container').appendChild(link);
+            };
+            
+            const svgBlob = new Blob([svgData], {type: 'image/svg+xml;charset=utf-8'});
+            const url = URL.createObjectURL(svgBlob);
+            img.src = url;
+        }
+        
+        // Generar PNGs para cada tamaño
+        sizes.forEach(size => {
+            const svg = `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" xmlns="http://www.w3.org/2000/svg">
+                <rect width="${size}" height="${size}" fill="#0f172a"/>
+                <text x="${size * 0.25}" y="${size * 0.6}" font-family="Arial, sans-serif" font-size="${size * 0.32}" font-weight="bold" fill="#f97316" text-anchor="middle">H</text>
+                <text x="${size * 0.65}" y="${size * 0.6}" font-family="Arial, sans-serif" font-size="${size * 0.32}" font-weight="bold" fill="#ffffff" text-anchor="middle">Lab</text>
+            </svg>`;
+            
+            svgToPng(svg, size, `icon-${size}x${size}.png`);
+        });
+    </script>
+</body>
+</html>

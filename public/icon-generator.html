@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <title>Generador de Iconos PNG para PWA</title>
+    <style>
+        body { 
+            font-family: system-ui, sans-serif; 
+            max-width: 800px; 
+            margin: 40px auto; 
+            padding: 20px;
+            background: #0f172a;
+            color: white;
+        }
+        h1 { color: #f97316; }
+        .icon-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); 
+            gap: 20px; 
+            margin: 20px 0; 
+        }
+        .icon-item { 
+            text-align: center; 
+            border: 1px solid #374151;
+            padding: 15px;
+            border-radius: 8px;
+            background: #1e293b;
+        }
+        canvas { 
+            border: 1px solid #ccc; 
+            margin: 10px 0;
+            background: white;
+        }
+        .download-btn {
+            background: #f97316;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            margin: 5px;
+        }
+        .download-btn:hover { background: #ea580c; }
+        .preview { width: 64px; height: 64px; }
+    </style>
+</head>
+<body>
+    <h1>🎨 Generador de Iconos PNG - HLab PWA</h1>
+    <p>Generando iconos PNG para la aplicación HipotecaLab...</p>
+    
+    <div id="icons" class="icon-grid"></div>
+    
+    <script>
+        const sizes = [72, 96, 128, 144, 152, 192, 384, 512];
+        
+        function createIcon(size) {
+            const canvas = document.createElement('canvas');
+            canvas.width = size;
+            canvas.height = size;
+            const ctx = canvas.getContext('2d');
+            
+            // Fondo azul oscuro
+            ctx.fillStyle = '#0f172a';
+            ctx.fillRect(0, 0, size, size);
+            
+            // Configurar fuente
+            const fontSize = size * 0.32;
+            ctx.font = `bold ${fontSize}px system-ui, -apple-system, Arial, sans-serif`;
+            ctx.textBaseline = 'middle';
+            
+            // Medir texto para centrarlo mejor
+            const hText = 'H';
+            const labText = 'Lab';
+            
+            // Dibujar H en naranja
+            ctx.fillStyle = '#f97316';
+            ctx.textAlign = 'left';
+            const hWidth = ctx.measureText(hText).width;
+            const totalWidth = hWidth + ctx.measureText(labText).width;
+            const startX = (size - totalWidth) / 2;
+            
+            ctx.fillText(hText, startX, size * 0.6);
+            
+            // Dibujar Lab en blanco
+            ctx.fillStyle = '#ffffff';
+            ctx.fillText(labText, startX + hWidth, size * 0.6);
+            
+            return canvas;
+        }
+        
+        function createIconItem(size) {
+            const canvas = createIcon(size);
+            const preview = createIcon(64); // Versión pequeña para preview
+            
+            const div = document.createElement('div');
+            div.className = 'icon-item';
+            
+            const title = document.createElement('h3');
+            title.textContent = `${size}x${size}px`;
+            
+            const previewDiv = document.createElement('div');
+            preview.className = 'preview';
+            previewDiv.appendChild(preview);
+            
+            const downloadLink = document.createElement('a');
+            downloadLink.href = canvas.toDataURL('image/png');
+            downloadLink.download = `icon-${size}x${size}.png`;
+            downloadLink.className = 'download-btn';
+            downloadLink.textContent = `📥 Descargar PNG`;
+            
+            const copyButton = document.createElement('button');
+            copyButton.className = 'download-btn';
+            copyButton.textContent = '📋 Copiar Data URL';
+            copyButton.onclick = () => {
+                navigator.clipboard.writeText(canvas.toDataURL('image/png'));
+                copyButton.textContent = '✅ Copiado';
+                setTimeout(() => copyButton.textContent = '📋 Copiar Data URL', 2000);
+            };
+            
+            div.appendChild(title);
+            div.appendChild(previewDiv);
+            div.appendChild(downloadLink);
+            div.appendChild(copyButton);
+            
+            return div;
+        }
+        
+        // Generar todos los iconos
+        const container = document.getElementById('icons');
+        sizes.forEach(size => {
+            container.appendChild(createIconItem(size));
+        });
+        
+        // Botón para descargar todos
+        const downloadAllBtn = document.createElement('button');
+        downloadAllBtn.className = 'download-btn';
+        downloadAllBtn.textContent = '📦 Descargar Todos los Iconos';
+        downloadAllBtn.style.fontSize = '16px';
+        downloadAllBtn.style.padding = '12px 24px';
+        downloadAllBtn.style.marginTop = '20px';
+        downloadAllBtn.style.display = 'block';
+        downloadAllBtn.style.margin = '20px auto';
+        
+        downloadAllBtn.onclick = () => {
+            sizes.forEach(size => {
+                const canvas = createIcon(size);
+                const link = document.createElement('a');
+                link.href = canvas.toDataURL('image/png');
+                link.download = `icon-${size}x${size}.png`;
+                link.click();
+            });
+        };
+        
+        document.body.appendChild(downloadAllBtn);
+        
+        console.log('🎉 Generador de iconos PNG listo!');
+    </script>
+</body>
+</html>

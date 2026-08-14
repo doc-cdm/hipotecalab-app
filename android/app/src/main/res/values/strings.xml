@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">HipotecaLab</string>
+    <string name="title_activity_main">HipotecaLab</string>
+    <string name="package_name">com.hipotecalab.app</string>
+    <string name="custom_url_scheme">com.hipotecalab.app</string>
+</resources>

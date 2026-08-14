@@ -1,20 +1,16 @@
 import { Download, X } from 'lucide-react';
+import { downloadTextFile } from '../../shared/utils/downloadTextFile';
+import { buildLegalDocumentText, type LegalSection } from './legalText';
 
 interface PrivacyPolicyModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-interface PolicySection {
-  title: string;
-  paragraphs?: string[];
-  bullets?: string[];
-}
-
 const LAST_UPDATED = '13 de agosto de 2026';
 const POLICY_VERSION = '2.0';
 
-const policySections: PolicySection[] = [
+const policySections: LegalSection[] = [
   {
     title: '1. Responsable y ámbito de esta política',
     paragraphs: [
@@ -103,35 +99,19 @@ const policySections: PolicySection[] = [
   },
 ];
 
-const buildDownloadText = () => {
-  const sections = policySections.map((section) => {
-    const paragraphs = section.paragraphs?.join('\n\n') ?? '';
-    const bullets = section.bullets?.map((item) => `• ${item}`).join('\n') ?? '';
-    return [section.title.toUpperCase(), paragraphs, bullets].filter(Boolean).join('\n\n');
-  });
-
-  return [
-    'POLÍTICA DE PRIVACIDAD DE HIPOTECALAB',
-    `Última actualización: ${LAST_UPDATED}`,
-    `Versión: ${POLICY_VERSION}`,
-    'Esta política explica qué información utiliza HipotecaLab, para qué se usa y qué opciones tienes. No es necesario aceptar esta política para que sea válida como información sobre el tratamiento de datos.',
-    ...sections,
-    'CONTACTO\n\nHipotecaLab\nMadrid, España\nCorreo electrónico: cdominguezmonferrer@gmail.com',
-  ].join('\n\n');
-};
+const buildDownloadText = () => buildLegalDocumentText({
+  title: 'POLÍTICA DE PRIVACIDAD DE HIPOTECALAB',
+  lastUpdated: LAST_UPDATED,
+  version: POLICY_VERSION,
+  introduction: 'Esta política explica qué información utiliza HipotecaLab, para qué se usa y qué opciones tienes. No es necesario aceptar esta política para que sea válida como información sobre el tratamiento de datos.',
+  sections: policySections,
+});
 
 const PrivacyPolicyModal = ({ isOpen, onClose }: PrivacyPolicyModalProps) => {
   if (!isOpen) return null;
 
   const downloadPolicy = () => {
-    const blob = new Blob([buildDownloadText()], { type: 'text/plain;charset=utf-8' });
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.download = 'Politica-Privacidad-HipotecaLab.txt';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(link.href);
+    downloadTextFile('Politica-Privacidad-HipotecaLab.txt', buildDownloadText());
   };
 
   return (

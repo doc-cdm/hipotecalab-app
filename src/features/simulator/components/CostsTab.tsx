@@ -4,7 +4,7 @@ import { TabProps } from '../../../types/simulation';
 import type { CostBreakdown } from '../../../types/simulation';
 import { formatCurrency } from '../../../utils/formatters';
 import { calculateTotalInvestment } from '../../../utils/calculations';
-import HelpTooltip from '../../../components/HelpTooltip';
+import HelpTooltip from '../../../shared/components/HelpTooltip';
 
 const CostsTab: React.FC<TabProps> = ({ 
   simulationData, 

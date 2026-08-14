@@ -1,20 +1,16 @@
 import { Download, X } from 'lucide-react';
+import { downloadTextFile } from '../../shared/utils/downloadTextFile';
+import { buildLegalDocumentText, type LegalSection } from './legalText';
 
 interface TermsOfUseModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-interface TermsSection {
-  title: string;
-  paragraphs?: string[];
-  bullets?: string[];
-}
-
 const LAST_UPDATED = '13 de agosto de 2026';
 const TERMS_VERSION = '2.0';
 
-const termsSections: TermsSection[] = [
+const termsSections: LegalSection[] = [
   {
     title: '1. Titular y ámbito de los términos',
     paragraphs: [
@@ -122,35 +118,19 @@ const termsSections: TermsSection[] = [
   },
 ];
 
-const buildDownloadText = () => {
-  const sections = termsSections.map((section) => {
-    const paragraphs = section.paragraphs?.join('\n\n') ?? '';
-    const bullets = section.bullets?.map((item) => `• ${item}`).join('\n') ?? '';
-    return [section.title.toUpperCase(), paragraphs, bullets].filter(Boolean).join('\n\n');
-  });
-
-  return [
-    'TÉRMINOS DE USO DE HIPOTECALAB',
-    `Última actualización: ${LAST_UPDATED}`,
-    `Versión: ${TERMS_VERSION}`,
-    'Lee estos términos antes de utilizar HipotecaLab. Describen el servicio, sus límites y las reglas aplicables a su uso.',
-    ...sections,
-    'CONTACTO\n\nHipotecaLab\nMadrid, España\nCorreo electrónico: cdominguezmonferrer@gmail.com',
-  ].join('\n\n');
-};
+const buildDownloadText = () => buildLegalDocumentText({
+  title: 'TÉRMINOS DE USO DE HIPOTECALAB',
+  lastUpdated: LAST_UPDATED,
+  version: TERMS_VERSION,
+  introduction: 'Lee estos términos antes de utilizar HipotecaLab. Describen el servicio, sus límites y las reglas aplicables a su uso.',
+  sections: termsSections,
+});
 
 const TermsOfUseModal = ({ isOpen, onClose }: TermsOfUseModalProps) => {
   if (!isOpen) return null;
 
   const downloadTerms = () => {
-    const blob = new Blob([buildDownloadText()], { type: 'text/plain;charset=utf-8' });
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.download = 'Terminos-Uso-HipotecaLab.txt';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(link.href);
+    downloadTextFile('Terminos-Uso-HipotecaLab.txt', buildDownloadText());
   };
 
   return (

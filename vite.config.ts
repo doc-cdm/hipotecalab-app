@@ -5,10 +5,8 @@ import react from '@vitejs/plugin-react';
 export default defineConfig({
   plugins: [react()],
   
-  // Optimizaciones de dependencias
   optimizeDeps: {
-    // No prebundlear firebase/auth ni firestore
-    exclude: ['lucide-react', 'firebase/app', 'firebase/auth', 'firebase/firestore'],
+    exclude: ['lucide-react'],
     include: ['react', 'react-dom']
   },
   
@@ -29,12 +27,10 @@ export default defineConfig({
       output: {
         manualChunks(id) {
           if (id.includes('node_modules')) {
-            if (id.includes('firebase/auth') || id.includes('firebase/app')) return 'firebase-vendor';
-            if (id.includes('firebase/firestore')) return 'firestore-vendor';
             if (id.includes('react')) return 'react-vendor';
             if (id.includes('lucide-react')) return 'icons-vendor';
             if (id.includes('jspdf')) return 'pdf-vendor';
-            if (id.includes('xlsx')) return 'excel-vendor';
+            if (id.includes('write-excel-file')) return 'excel-vendor';
           }
         }
       }

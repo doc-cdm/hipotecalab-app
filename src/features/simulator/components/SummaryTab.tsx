@@ -36,7 +36,7 @@ const SummaryTab: React.FC<TabProps> = ({
 
   const handleExportPDF = async () => {
     try {
-      const { exportToPDF } = await import('../../../utils/exportUtils');
+      const { exportToPDF } = await import('../exporters');
       await exportToPDF(simulationData);
     } catch (error) {
       console.error('Error al exportar PDF:', error);
@@ -46,7 +46,7 @@ const SummaryTab: React.FC<TabProps> = ({
 
   const handleExportExcel = async () => {
     try {
-      const { exportToExcel } = await import('../../../utils/exportUtils');
+      const { exportToExcel } = await import('../exporters');
       await exportToExcel(simulationData);
     } catch (error) {
       console.error('Error al exportar Excel:', error);

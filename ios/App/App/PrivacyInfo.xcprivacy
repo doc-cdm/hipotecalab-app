@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+
+  <!-- ¿La app hace tracking del usuario? No -->
+  <key>NSPrivacyTracking</key>
+  <false/>
+
+  <!-- Dominios de tracking (ninguno) -->
+  <key>NSPrivacyTrackingDomains</key>
+  <array/>
+
+  <!-- Datos recopilados (ninguno — la app es un simulador offline) -->
+  <key>NSPrivacyCollectedDataTypes</key>
+  <array/>
+
+  <!-- APIs del sistema que usa la app -->
+  <key>NSPrivacyAccessedAPITypes</key>
+  <array>
+
+    <!--
+      NSUserDefaults / localStorage:
+      WKWebView (usado por Capacitor) accede a NSUserDefaults internamente.
+      La app usa localStorage para guardar preferencias del usuario
+      (ej. última calculadora usada, datos del formulario).
+      Razón CA92.1: "Acceder únicamente a información propia de la app"
+    -->
+    <dict>
+      <key>NSPrivacyAccessedAPIType</key>
+      <string>NSPrivacyAccessedAPICategoryUserDefaults</string>
+      <key>NSPrivacyAccessedAPITypeReasons</key>
+      <array>
+        <string>CA92.1</string>
+      </array>
+    </dict>
+
+  </array>
+
+</dict>
+</plist>

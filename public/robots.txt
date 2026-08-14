@@ -1,0 +1,15 @@
+User-agent: *
+Allow: /
+
+# Sitemap location (actualizar con la URL real cuando se despliegue)
+Sitemap: https://tu-dominio.com/sitemap.xml
+
+# Permitir acceso a todos los recursos públicos
+Allow: /icons/
+Allow: /assets/
+Allow: /manifest.json
+Allow: /sw.js
+
+# Evitar indexación de archivos de desarrollo
+Disallow: /*.js.map$
+Disallow: /*.css.map$

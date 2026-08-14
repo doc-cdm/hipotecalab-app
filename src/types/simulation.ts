@@ -16,13 +16,6 @@ export interface AmortizationRow {
   amortizedCapital: number;
 }
 
-export interface ViabilitySpecificData {
-  monthlyNetIncome: number;
-  debtRatio: number;
-  maxLoanAmount: number;
-  type: 'viability';
-}
-
 export interface SimulationInputs {
   name: string;
   propertyPrice: number;

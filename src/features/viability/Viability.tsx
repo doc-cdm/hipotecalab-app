@@ -2,39 +2,8 @@ import { useState, type FC } from 'react';
 import { Calculator } from 'lucide-react';
 import { formatCurrency, formatPercentage } from '../../utils/formatters';
 import { calculateMaximumLoan } from '../../utils/calculations';
-import HelpTooltip from '../../components/HelpTooltip';
-
-interface ViabilityData {
-  monthlyNetIncome: number;
-  debtRatio: number;
-  tin: number;
-  loanTerm: number;
-  region: string;
-  isNewConstruction: boolean;
-}
-
-// ITP rates by region (2024)
-const ITP_RATES: Record<string, number> = {
-  'Andalucía': 7,
-  'Aragón': 8,
-  'Asturias': 8,
-  'Baleares': 8,
-  'Canarias': 6.5,
-  'Cantabria': 9,
-  'Castilla-La Mancha': 9,
-  'Castilla y León': 8,
-  'Cataluña': 10,
-  'Ceuta': 6,
-  'Madrid': 6,
-  'C. Valenciana': 10,
-  'Extremadura': 8,
-  'Galicia': 8,
-  'La Rioja': 7,
-  'Melilla': 6,
-  'Murcia': 8,
-  'Navarra': 6,
-  'País Vasco': 7
-};
+import HelpTooltip from '../../shared/components/HelpTooltip';
+import { calculatePurchaseCosts, ITP_RATES, type Region, type ViabilityData } from './model';
 
 const Viability: FC = () => {
   const [data, setData] = useState<ViabilityData>({
@@ -58,36 +27,6 @@ const Viability: FC = () => {
         field === 'isNewConstruction' ? value :
           parseFloat(value as string) || 0
     }));
-  };
-
-  // Calculate purchase costs
-  const calculatePurchaseCosts = (propertyPrice: number) => {
-    const appraisal = 350;
-    const notary = 1200;
-    const agency = 500;
-    const registry = 600;
-
-    // ITP or IVA depending on new construction
-    let tax = 0;
-    if (data.isNewConstruction) {
-      // New construction: IVA 10%
-      tax = propertyPrice * 0.10;
-    } else {
-      // Second hand: ITP based on region
-      const itpRate = ITP_RATES[data.region] || 7;
-      tax = propertyPrice * (itpRate / 100);
-    }
-
-    const totalCosts = appraisal + notary + agency + registry + tax;
-
-    return {
-      appraisal,
-      notary,
-      agency,
-      registry,
-      tax,
-      totalCosts
-    };
   };
 
   const handleCalculate = () => {
@@ -185,7 +124,7 @@ const Viability: FC = () => {
               </label>
               <select
                 value={data.region}
-                onChange={(e) => handleInputChange('region', e.target.value)}
+                onChange={(e) => handleInputChange('region', e.target.value as Region)}
                 className="w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
               >
                 {Object.keys(ITP_RATES).map((region) => (
@@ -266,7 +205,7 @@ const Viability: FC = () => {
                     {[0.8, 0.85, 0.9].map((financingRatio) => {
                       const propertyPrice = results.maxLoanAmount / financingRatio;
                       const downPayment = propertyPrice * (1 - financingRatio);
-                      const costs = calculatePurchaseCosts(propertyPrice);
+                      const costs = calculatePurchaseCosts(propertyPrice, data.region, data.isNewConstruction);
                       const totalInitialPayment = downPayment + costs.totalCosts;
 
                       return (

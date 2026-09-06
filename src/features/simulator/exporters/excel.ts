@@ -1,3 +1,4 @@
+import { saveFile, type SaveResult } from '../../../shared/utils/saveFile';
 import type { Cell, SheetData } from 'write-excel-file/browser';
 import type { SimulationData } from '../../../types/simulation';
 import { calculateTotalInvestment } from '../../../utils/calculations';
@@ -6,7 +7,7 @@ const titleCell = (value: string): Cell => ({
   value,
   fontWeight: 'bold',
   fontSize: 16,
-  textColor: '#E68C03',
+  textColor: '#f97316',
 });
 
 const sectionCell = (value: string): Cell => ({
@@ -59,8 +60,8 @@ export const buildWorkbookData = (simulationData: SimulationData) => {
     ['Fecha de inicio', simulationData.startDate],
     [],
     [sectionCell('INFORMACIÓN DE CUOTAS')],
-    ['Cuota mensual sin extras', currencyCell(simulationData.monthlyPayment)],
-    ['Cuota mensual con extras', currencyCell(simulationData.monthlyPaymentWithExtras)],
+    ['Cuota de la hipoteca', currencyCell(simulationData.monthlyPayment)],
+    ['Gasto mensual con seguros y otros gastos', currencyCell(simulationData.monthlyPaymentWithExtras)],
     ['Coste total del préstamo', currencyCell(totalInvestment + totalInterest)],
     ['Intereses totales', currencyCell(totalInterest)],
   ];
@@ -94,11 +95,11 @@ export const buildWorkbookData = (simulationData: SimulationData) => {
   return { summary, costs, amortization };
 };
 
-export const exportToExcel = async (simulationData: SimulationData): Promise<void> => {
+export const exportToExcel = async (simulationData: SimulationData): Promise<SaveResult> => {
   const { default: writeXlsxFile } = await import('write-excel-file/browser');
   const workbook = buildWorkbookData(simulationData);
 
-  await writeXlsxFile([
+  const blob = await writeXlsxFile([
     {
       data: workbook.summary,
       sheet: 'Resumen',
@@ -122,5 +123,6 @@ export const exportToExcel = async (simulationData: SimulationData): Promise<voi
       ],
       stickyRowsCount: 3,
     },
-  ]).toFile(`simulacion-hipotecaria-${new Date().toISOString().split('T')[0]}.xlsx`);
+  ]).toBlob();
+  return saveFile(new Blob([blob], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }), `simulacion-hipotecaria-${new Date().toISOString().split('T')[0]}.xlsx`);
 };

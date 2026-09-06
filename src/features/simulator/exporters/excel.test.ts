@@ -18,11 +18,11 @@ const simulation: SimulationData = {
   amortizationTable: [{
     month: 1,
     paymentDate: '2026-02-01',
-    payment: 900,
+    payment: 800,
     interest: 300,
-    principal: 600,
-    remainingBalance: 149_400,
-    amortizedCapital: 600,
+    principal: 500,
+    remainingBalance: 149_500,
+    amortizedCapital: 500,
   }],
 };
 

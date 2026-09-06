@@ -49,7 +49,7 @@ const Resources: FC = () => {
         <div className="max-w-4xl mx-auto">
           {activeSection === 'dictionary' ? (
             <div className="space-y-6">
-              <h2 className="text-2xl font-bold text-brand mb-6">Diccionario hipotecario</h2>
+              <h2 className="section-title mb-5">Diccionario hipotecario</h2>
               
               <div className="relative">
                 <label htmlFor="resource-search" className="block text-sm text-slate-300 mb-2">¿Qué término quieres entender?</label>
@@ -68,7 +68,7 @@ const Resources: FC = () => {
                 </div>
               )}
               {filteredCategories.map((category) => (
-                <div key={category.title} className="bg-slate-800 rounded-lg p-6">
+                <div key={category.title} className="space-y-4 border-t border-slate-700 pt-5">
                   <h3 className="text-lg font-semibold text-slate-200 mb-4">{category.title}</h3>
                   
                   <div className="space-y-3">
@@ -88,30 +88,30 @@ const Resources: FC = () => {
                         </button>
                         
                         {expandedItems.includes(termData.id) && (
-                          <div className="p-4 bg-slate-750 space-y-3">
+                          <div className="p-4 space-y-3">
                             <div>
-                              <h4 className="font-semibold text-brand mb-1">Definición</h4>
+                              <h4 className="font-semibold text-slate-100 mb-1">Definición</h4>
                               <p className="text-slate-300 text-sm">{termData.definition}</p>
                             </div>
                             
                             <div>
-                              <h4 className="font-semibold text-brand mb-1">Utilidad</h4>
+                              <h4 className="font-semibold text-slate-100 mb-1">Utilidad</h4>
                               <p className="text-slate-300 text-sm">{termData.utility}</p>
                             </div>
                             
                             <div>
-                              <h4 className="font-semibold text-brand mb-1">Por qué es importante</h4>
+                              <h4 className="font-semibold text-slate-100 mb-1">Por qué es importante</h4>
                               <p className="text-slate-300 text-sm">{termData.importance}</p>
                             </div>
                             
                             <div>
-                              <h4 className="font-semibold text-brand mb-1">Ejemplo</h4>
+                              <h4 className="font-semibold text-slate-100 mb-1">Ejemplo</h4>
                               <p className="text-slate-300 text-sm">{termData.example}</p>
                             </div>
                             
                             {termData.notes && (
                               <div>
-                                <h4 className="font-semibold text-brand mb-1">Notas adicionales</h4>
+                                <h4 className="font-semibold text-slate-100 mb-1">Notas adicionales</h4>
                                 <p className="text-slate-300 text-sm">{termData.notes}</p>
                                 
                                 {/* Tabla específica para ITP */}
@@ -207,7 +207,7 @@ const Resources: FC = () => {
             </div>
           ) : (
             <div className="space-y-6">
-              <h2 className="text-2xl font-bold text-brand mb-6">Guía de compra de vivienda</h2>
+              <h2 className="section-title mb-5">Guía de compra de vivienda</h2>
               
               <div className="space-y-4">
                 {buyingGuideSteps.map((step, index) => (

@@ -28,19 +28,19 @@ const LoanTab: React.FC<TabProps> = ({
   const requestedFinancing = totalInvestment - simulationData.initialContribution;
   const isFormValid = simulationData.initialContribution >= 0 && 
                      simulationData.tin > 0 && 
-                     simulationData.tae > 0 && 
+                     simulationData.tae >= 0 &&
                      simulationData.loanTerm > 0;
 
   return (
-    <div className="p-6 max-w-4xl mx-auto">
-      <div className="bg-slate-800 rounded-lg p-6">
-        <h2 className="text-2xl font-bold text-brand mb-6">Detalles del préstamo</h2>
+    <div className="tool-layout">
+      <div className="space-y-5">
+        <h2 className="section-title mb-5">Detalles del préstamo</h2>
         
         <div className="space-y-6">
           {/* Initial Contribution */}
           <div>
             <label className="block text-sm font-medium text-slate-300 mb-2">
-              Aportación inicial (cantidad ahorrada) *
+              Ahorro que destinas a esta compra *
             </label>
             <input
               type="number"
@@ -51,11 +51,13 @@ const LoanTab: React.FC<TabProps> = ({
             />
           </div>
 
+          <p className="text-sm text-slate-300">Indica solo el ahorro que quieres aportar a esta compra, no todos tus ahorros. Se resta del precio y los gastos para estimar el préstamo.</p>
+
           {/* Total Investment Summary */}
           <div className="bg-slate-700 rounded-lg p-4 space-y-2">
             <div className="flex justify-between items-center">
               <span className="text-sm font-medium text-slate-300">
-                Coste total de la inversión
+                Precio + gastos de compra
               </span>
               <span className="text-lg font-semibold text-slate-200">
                 {formatCurrency(totalInvestment)}
@@ -103,9 +105,9 @@ const LoanTab: React.FC<TabProps> = ({
             <div>
               <div className="flex items-center space-x-2 mb-2">
                 <label className="block text-sm font-medium text-slate-300">
-                  Tasa Anual Equivalente (TAE) % *
+                  TAE indicada (%) · opcional
                 </label>
-                <HelpTooltip content="Coste real del préstamo incluyendo gastos y comisiones. La TAE siempre es mayor que el TIN y representa el coste total efectivo del préstamo." />
+                <HelpTooltip content="Indicador anual del coste del préstamo que incorpora el interés y los gastos que correspondan. Aquí se muestra como referencia; la cuota se calcula con el TIN." />
               </div>
               <input
                 type="number"
@@ -183,7 +185,7 @@ const LoanTab: React.FC<TabProps> = ({
             disabled={!canGoNext || !isFormValid}
             className={`flex items-center space-x-2 px-6 py-2 rounded-md font-medium transition-colors ${
               canGoNext && isFormValid
-                ? 'bg-brand hover:bg-brand-hover text-white'
+                ? 'bg-brand hover:bg-brand-hover text-slate-950'
                 : 'bg-slate-600 text-slate-400 cursor-not-allowed'
             }`}
           >

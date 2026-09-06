@@ -14,9 +14,9 @@ const PaymentTab: React.FC<TabProps> = ({
   const isCalculated = simulationData.monthlyPayment > 0;
 
   return (
-    <div className="p-6 max-w-4xl mx-auto">
-      <div className="bg-slate-800 rounded-lg p-6">
-        <h2 className="text-2xl font-bold text-brand mb-6">Cuota mensual</h2>
+    <div className="tool-layout">
+      <div className="space-y-5">
+        <h2 className="section-title mb-5">Cuota mensual</h2>
         
         <div className="space-y-6">
           {/* Payment Results */}
@@ -88,7 +88,7 @@ const PaymentTab: React.FC<TabProps> = ({
             disabled={!canGoNext || !isCalculated}
             className={`flex items-center space-x-2 px-6 py-2 rounded-md font-medium transition-colors ${
               canGoNext && isCalculated
-                ? 'bg-brand hover:bg-brand-hover text-white'
+                ? 'bg-brand hover:bg-brand-hover text-slate-950'
                 : 'bg-slate-600 text-slate-400 cursor-not-allowed'
             }`}
           >

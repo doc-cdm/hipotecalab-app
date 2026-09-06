@@ -63,9 +63,9 @@ const CostsTab: React.FC<TabProps> = ({
   const isFormValid = simulationData.name.trim() !== '' && simulationData.propertyPrice > 0 && Number.isFinite(simulationData.propertyPrice) && Object.values(simulationData.costs).every(value => Number.isFinite(value) && value >= 0);
 
   return (
-    <div className="p-6 max-w-4xl mx-auto">
-      <div className="bg-slate-800 rounded-lg p-6">
-        <h2 className="text-2xl font-bold text-brand mb-6">Costes iniciales</h2>
+    <div className="tool-layout">
+      <div className="space-y-5">
+        <h2 className="section-title mb-5">Costes iniciales</h2>
         
         <div className="space-y-6">
           {/* Simulation Name */}
@@ -145,7 +145,7 @@ const CostsTab: React.FC<TabProps> = ({
           <div className="bg-slate-700 rounded-lg p-4">
             <div className="flex flex-col sm:flex-row justify-between gap-2 sm:items-center">
               <span className="text-lg font-semibold text-slate-200">
-                Coste total de la inversión
+                Precio + gastos de compra
               </span>
               <span className="text-2xl font-bold text-brand">
                 {formatCurrency(totalInvestment)}

@@ -23,7 +23,7 @@ const faqItems = [
   },
 ];
 
-const trustBadges = ['Gratis', 'Sin registro', 'Sin datos personales'];
+const trustBadges = ['Gratis', 'Sin registro', 'Cálculos en tu dispositivo'];
 
 /**
  * Ejemplo mostrado en la home. Usa los mismos inputs, el mismo motor de cálculo y

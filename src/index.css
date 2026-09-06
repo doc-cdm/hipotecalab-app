@@ -273,17 +273,27 @@ textarea {
   .brand-eyebrow { @apply text-xs font-semibold tracking-[0.16em] text-brand; }
   .brand-icon { @apply flex shrink-0 h-9 w-9 sm:h-12 sm:w-12 items-center justify-center rounded-2xl border border-blue-400/20 bg-blue-400/10 text-blue-200; }
   .menu-screen, .welcome-screen { background-image: radial-gradient(ellipse at 85% 0%, #2563eb12, transparent 55%); }
-  .tool-card { @apply flex flex-col text-left p-4 sm:p-6 border border-slate-700 bg-slate-800/80; border-radius: 24px 24px 10px 24px; box-shadow: 0 8px 28px #02061718; }
+  .tool-card { @apply flex flex-col text-left p-4 sm:p-6 border border-slate-700 bg-slate-800/80; border-radius: 16px; }
   .tool-card:hover { border-color: #f9731680; background: #23324b; }
   .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; z-index: 30; padding: 8px max(8px, env(safe-area-inset-left)); border-top: 1px solid #334155; background: #172238f5; backdrop-filter: blur(16px); }
   .bottom-nav > div { max-width: 640px; margin: auto; }
   .app-content { padding-bottom: calc(88px + env(safe-area-inset-bottom)); }
   .app-content > div { animation: section-enter 180ms ease-out; }
-  .step-heading { @apply mx-auto w-full max-w-4xl px-5 pt-6 pb-4; }
+  .step-heading { @apply mx-auto w-full max-w-4xl px-5 py-3; }
 }
 
 @keyframes section-enter { from { opacity: .5; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
 @media (max-width: 480px) {
   .app-content .p-6 { padding: 1rem; }
+}
+
+@layer components {
+  .tool-layout { @apply mx-auto w-full max-w-4xl px-4 py-5 sm:px-6 sm:py-6; }
+  .section-title { @apply text-xl sm:text-2xl font-semibold tracking-tight text-slate-100; }
+  .secondary-button { @apply rounded-xl border border-slate-600 px-4 py-3 text-sm font-medium text-slate-200 hover:bg-slate-800 disabled:opacity-50; }
+  .result-primary { @apply rounded-2xl border border-orange-400/30 bg-slate-800 p-5; }
+  .result-secondary { @apply rounded-2xl bg-slate-800/50 p-5; }
+  .result-value { @apply mt-2 text-2xl font-semibold tracking-tight break-words; font-variant-numeric: tabular-nums; }
+  .result-note { @apply mt-2 text-xs leading-relaxed text-slate-400; }
 }

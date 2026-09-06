@@ -7,6 +7,11 @@ import MainMenu from './features/home/MainMenu';
 import SectionBoundary from './shared/components/SectionBoundary';
 import { NAVIGATION_SECTIONS } from './app/navigation';
 import { useSectionNavigation } from './app/useSectionNavigation';
+import type { Section } from './app/navigation';
+import RetainedSection from './app/RetainedSection';
+import { useSimulation } from './features/simulator/useSimulation';
+import type { SimulationInputs } from './types/simulation';
+import type { SimulatorTab } from './features/simulator/Simulator';
 
 // Carga perezosa de secciones pesadas para reducir JS inicial
 const Simulator = lazy(() => import('./features/simulator/Simulator'));
@@ -27,6 +32,15 @@ const LoadingSpinner = () => (
 
 function App() {
   const { activeSection, navigate: setActiveSection } = useSectionNavigation();
+  const simulation = useSimulation();
+  const [simulatorTab, setSimulatorTab] = useState<SimulatorTab>('costs');
+  const [visited, setVisited] = useState<Section[]>([activeSection]);
+  if (!visited.includes(activeSection)) setVisited([...visited, activeSection]);
+  const openScenario = (inputs: Partial<SimulationInputs>) => {
+    simulation.updateSimulation(inputs);
+    setSimulatorTab('summary');
+    setActiveSection('simulator');
+  };
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isPrivacyModalOpen, setIsPrivacyModalOpen] = useState(false);
   const [isTermsModalOpen, setIsTermsModalOpen] = useState(false);
@@ -36,7 +50,6 @@ function App() {
 
   useEffect(() => {
     document.title = `${NAVIGATION_SECTIONS.find(section => section.id === activeSection)?.label ?? 'Inicio'} · HipotecaLab`;
-    window.scrollTo(0, 0);
     document.getElementById('main-content')?.focus({ preventScroll: true });
   }, [activeSection]);
 
@@ -64,8 +77,8 @@ function App() {
     };
   }, [isMenuOpen]);
 
-  const renderActiveSection = () => {
-    switch (activeSection) {
+  const renderSection = (section: Section) => {
+    switch (section) {
       case 'home':
         return <HomeScreen onStart={() => setActiveSection('main-menu')} onOpenPrivacy={() => setIsPrivacyModalOpen(true)} onOpenTerms={() => setIsTermsModalOpen(true)} />;
       case 'main-menu':
@@ -75,7 +88,7 @@ function App() {
           <div className="relative overflow-hidden">
             <div className="relative z-10">
               <Suspense fallback={<LoadingSpinner />}>
-                <Simulator />
+                <Simulator {...simulation} activeTab={simulatorTab} onTabChange={setSimulatorTab} />
               </Suspense>
             </div>
           </div>
@@ -85,7 +98,7 @@ function App() {
           <div className="relative overflow-hidden">
             <div className="relative z-10">
               <Suspense fallback={<LoadingSpinner />}>
-                <Viability />
+                <Viability onOpenScenario={openScenario} hasSimulation={simulation.simulationData.propertyPrice > 0} />
               </Suspense>
             </div>
           </div>
@@ -258,7 +271,11 @@ function App() {
       {/* Main Content */}
       <main id="main-content" tabIndex={-1} className={(activeSection === 'home' || activeSection === 'main-menu') ? 'min-h-screen' : 'app-content min-h-screen flex flex-col'}>
         <div className={(activeSection === 'home' || activeSection === 'main-menu') ? '' : 'flex-1 overflow-hidden'}>
-          <SectionBoundary key={activeSection} onHome={() => setActiveSection('main-menu')}>{renderActiveSection()}</SectionBoundary>
+          {visited.map(section => (
+            <RetainedSection key={section} active={section === activeSection}>
+              <SectionBoundary onHome={() => setActiveSection('main-menu')}>{renderSection(section)}</SectionBoundary>
+            </RetainedSection>
+          ))}
         </div>
 
         {/* Bottom Navigation */}

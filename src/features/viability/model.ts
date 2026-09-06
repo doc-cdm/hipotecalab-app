@@ -1,3 +1,5 @@
+import type { SimulationInputs } from '../../types/simulation';
+
 export const ITP_RATES = {
   Andalucía: 7,
   Aragón: 8,
@@ -52,5 +54,22 @@ export const calculatePurchaseCosts = (
     registry,
     tax,
     totalCosts: appraisal + notary + agency + registry + tax,
+  };
+};
+
+// Transfer the exact scenario, including purchase costs, so the simulator keeps
+// the same principal and monthly payment as the viability estimate.
+export const createViabilityScenario = (data: ViabilityData, loan: number, financingRatio: number): Partial<SimulationInputs> => {
+  const propertyPrice = loan / financingRatio;
+  const costs = calculatePurchaseCosts(propertyPrice, data.region, data.isNewConstruction);
+  return {
+    name: `Vivienda en ${data.region} · financiación ${Math.round(financingRatio * 100)}%`,
+    propertyPrice,
+    initialContribution: propertyPrice - loan + costs.totalCosts,
+    costs: {
+      appraisal: costs.appraisal, notary: costs.notary, agency: costs.agency,
+      registry: costs.registry, taxRate: data.isNewConstruction ? 10 : ITP_RATES[data.region],
+    },
+    tin: data.tin, tae: 0, loanTerm: data.loanTerm, monthlyExtras: 0,
   };
 };

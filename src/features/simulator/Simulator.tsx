@@ -4,20 +4,26 @@ import LoanTab from './components/LoanTab';
 import PaymentTab from './components/PaymentTab';
 import AmortizationTab from './components/AmortizationTab';
 import SummaryTab from './components/SummaryTab';
-import { useSimulation } from './useSimulation';
+import type { useSimulation } from './useSimulation';
+import type { SimulationData } from '../../types/simulation';
 
-type Tab = 'costs' | 'loan' | 'payment' | 'amortization' | 'summary';
+export type SimulatorTab = 'costs' | 'loan' | 'payment' | 'amortization' | 'summary';
 
-const Simulator: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<Tab>('costs');
-  const { simulationData, updateSimulation, updateCosts } = useSimulation();
+type Props = ReturnType<typeof useSimulation> & { activeTab: SimulatorTab; onTabChange: (tab: SimulatorTab) => void };
+
+const Simulator: React.FC<Props> = ({ simulationData, updateSimulation, updateCosts, activeTab, onTabChange }) => {
+  const [comparison, setComparison] = useState<SimulationData | null>(null);
+  const setActiveTab = (tab: SimulatorTab) => {
+    onTabChange(tab);
+    document.getElementById('simulator-heading')?.scrollIntoView({ block: 'start' });
+  };
 
   const tabs = [
-    { id: 'costs' as Tab, label: 'Costes' },
-    { id: 'loan' as Tab, label: 'Préstamo' },
-    { id: 'payment' as Tab, label: 'Cuota' },
-    { id: 'amortization' as Tab, label: 'Amortización' },
-    { id: 'summary' as Tab, label: 'Resumen' },
+    { id: 'costs' as SimulatorTab, label: 'Costes' },
+    { id: 'loan' as SimulatorTab, label: 'Préstamo' },
+    { id: 'payment' as SimulatorTab, label: 'Cuota' },
+    { id: 'amortization' as SimulatorTab, label: 'Amortización' },
+    { id: 'summary' as SimulatorTab, label: 'Resumen' },
   ];
 
   const getCurrentTabIndex = () => tabs.findIndex(tab => tab.id === activeTab);
@@ -59,7 +65,7 @@ const Simulator: React.FC = () => {
       case 'amortization':
         return <AmortizationTab {...props} />;
       case 'summary':
-        return <SummaryTab {...props} />;
+        return <SummaryTab {...props} comparison={comparison} onEdit={() => setActiveTab('loan')} onCompare={() => { setComparison(simulationData); setActiveTab('loan'); }} onClearComparison={() => setComparison(null)} />;
       default:
         return <CostsTab {...props} />;
     }
@@ -67,12 +73,12 @@ const Simulator: React.FC = () => {
 
   return (
     <div className="h-full flex flex-col">
-      <div className="step-heading">
-        <p className="brand-eyebrow mb-2">SIMULADOR</p>
-        <h1 className="text-2xl font-semibold">Tu hipoteca, paso a paso</h1>
-        <p className="mt-2 text-sm text-slate-300">Empieza por la vivienda y explora cómo cambia el resultado.</p>
-        <p className="mt-4 text-xs text-brand" aria-live="polite">Paso {getCurrentTabIndex() + 1} de {tabs.length} · {tabs[getCurrentTabIndex()].label}</p>
-        <div className="mt-2 flex gap-1.5" aria-hidden="true">{tabs.map((tab, index) => <span key={tab.id} className={`h-1 flex-1 rounded-full ${index <= getCurrentTabIndex() ? 'bg-brand' : 'bg-slate-700'}`} />)}</div>
+      <div id="simulator-heading" className="step-heading scroll-mt-24">
+        <div className="flex flex-wrap items-baseline justify-between gap-2">
+          <h1 className="text-xl font-semibold">Tu simulación hipotecaria</h1>
+          <p className="text-xs text-slate-400" aria-live="polite">Paso {getCurrentTabIndex() + 1} de {tabs.length} · {tabs[getCurrentTabIndex()].label}</p>
+        </div>
+        {comparison && activeTab !== 'summary' && <p className="mt-2 text-sm text-slate-300">Opción inicial conservada. Ajusta los datos y abre Resumen para comparar.</p>}
       </div>
       {/* Tab Navigation */}
       <div className="bg-slate-800 border-b border-slate-700 px-2 py-2">

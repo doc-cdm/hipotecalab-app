@@ -3,9 +3,14 @@ import { Calculator, Home, Info } from 'lucide-react';
 import { formatCurrency, formatPercentage } from '../../utils/formatters';
 import { calculateMaximumLoan } from '../../utils/calculations';
 import HelpTooltip from '../../shared/components/HelpTooltip';
-import { calculatePurchaseCosts, ITP_RATES, type Region, type ViabilityData } from './model';
+import { calculatePurchaseCosts, createViabilityScenario, ITP_RATES, type Region, type ViabilityData } from './model';
 
-const Viability: FC = () => {
+interface Props {
+  onOpenScenario: (inputs: Partial<import('../../types/simulation').SimulationInputs>) => void;
+  hasSimulation: boolean;
+}
+
+const Viability: FC<Props> = ({ onOpenScenario, hasSimulation }) => {
   const [data, setData] = useState<ViabilityData>({
     monthlyNetIncome: 0,
     debtRatio: 30,
@@ -53,9 +58,9 @@ const Viability: FC = () => {
 
   return (
     <div className="h-full overflow-y-auto">
-      <div className="p-6 max-w-4xl mx-auto">
-        <div className="bg-slate-800 rounded-lg p-6">
-          <p className="brand-eyebrow mb-2">VIABILIDAD</p><h1 className="text-2xl font-semibold mb-3">¿Qué encaja con tu presupuesto?</h1><p className="text-sm text-slate-300 mb-6">Introduce tus ingresos y las condiciones del préstamo para explorar tu capacidad de compra.</p>
+      <div className="tool-layout">
+        <div className="space-y-5">
+          <p className="brand-eyebrow mb-2">VIABILIDAD</p><h1 className="section-title mb-3">¿Qué encaja con tu presupuesto?</h1><p className="text-sm text-slate-300 mb-6">Introduce tus ingresos y las condiciones del préstamo para explorar tu capacidad de compra.</p>
 
           <div className="space-y-6">
             {/* Monthly Net Income */}
@@ -171,7 +176,7 @@ const Viability: FC = () => {
             </div>
 
             {/* Calculate Button */}
-            <div className="text-center">
+            <div className="result-secondary">
               <button
                 onClick={handleCalculate}
                 disabled={!isFormValid}
@@ -188,21 +193,21 @@ const Viability: FC = () => {
             {!results && <p className="text-sm text-slate-300 rounded-xl border border-dashed border-slate-600 p-4">{isFormValid ? 'Todo listo. Pulsa «Ver mi presupuesto» para descubrir tu resultado.' : 'Completa ingresos e interés positivos, un plazo de 1 a 50 años y un porcentaje de endeudamiento entre 0 y 100 (mayor que 0).'}</p>}
             {/* Results */}
             {results && (
-              <div ref={resultsRef} role="region" aria-label="Resultados de viabilidad" className="bg-slate-700 rounded-lg p-6 scroll-mt-24">
+              <div ref={resultsRef} role="region" aria-label="Resultados de viabilidad" className="space-y-5 border-t border-slate-700 pt-6 scroll-mt-24">
                 <h3 className="text-lg font-semibold text-slate-200 mb-4">Tu presupuesto orientativo</h3>
 
                 <p className="text-sm text-slate-300 mb-5">Con ingresos de {formatCurrency(data.monthlyNetIncome)} al mes, destinar el {formatPercentage(data.debtRatio)} a la hipoteca equivale a {formatCurrency(results.maxMonthlyPayment)} al mes. A un TIN del {formatPercentage(data.tin)} durante {data.loanTerm} años, esa cuota permite calcular el préstamo siguiente.</p>
                 {/* Results Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                  <div className="text-center">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
+                  <div className="result-secondary">
                     <div className="text-sm text-slate-400 mb-2">Cuota según el porcentaje elegido</div>
-                    <div className="text-2xl font-bold text-brand">
+                    <div className="result-value text-brand-cream">
                       {formatCurrency(results.maxMonthlyPayment)}
                     </div>
                   </div>
-                  <div className="text-center">
+                  <div className="result-secondary">
                     <div className="text-sm text-slate-400 mb-2">Préstamo estimado</div>
-                    <div className="text-2xl font-bold text-brand">
+                    <div className="result-value text-brand-cream">
                       {formatCurrency(results.maxLoanAmount)}
                     </div>
                   </div>
@@ -217,14 +222,18 @@ const Viability: FC = () => {
                       const downPayment = propertyPrice - results.maxLoanAmount;
                       const costs = calculatePurchaseCosts(propertyPrice, data.region, data.isNewConstruction);
                       return (
-                        <article key={financingRatio} className="rounded-xl border border-slate-600 bg-slate-800 p-4">
+                        <article key={financingRatio} className="rounded-2xl border border-slate-700 p-4">
                           <h5 className="text-sm font-semibold text-white">Si el banco financia el {Math.round(financingRatio * 100)}%</h5>
                           <dl className="mt-4 space-y-4">
-                            <div><dt className="text-sm text-slate-300">Precio de la vivienda</dt><dd className="text-xl font-bold text-brand">{formatCurrency(propertyPrice)}</dd></div>
+                            <div><dt className="text-sm text-slate-300">Precio de la vivienda</dt><dd className="text-xl font-semibold text-brand-cream">{formatCurrency(propertyPrice)}</dd></div>
                             <div><dt className="text-sm text-slate-300">Entrada que aportas tú</dt><dd className="font-semibold">{formatCurrency(downPayment)}</dd></div>
                             <div><dt className="text-sm text-slate-300">Gastos e impuestos estimados</dt><dd className="font-semibold">{formatCurrency(costs.totalCosts)}</dd></div>
-                            <div className="border-t border-slate-600 pt-3"><dt className="text-sm font-semibold text-white">Ahorro necesario para comprar</dt><dd className="text-xl font-bold text-brand">{formatCurrency(downPayment + costs.totalCosts)}</dd><p className="text-xs text-slate-400 mt-1">Entrada + gastos e impuestos estimados</p></div>
+                            <div className="border-t border-slate-600 pt-3"><dt className="text-sm font-semibold text-white">Ahorro necesario para comprar</dt><dd className="text-xl font-semibold text-brand-cream">{formatCurrency(downPayment + costs.totalCosts)}</dd><p className="text-xs text-slate-400 mt-1">Entrada + gastos e impuestos estimados</p></div>
                           </dl>
+                          <button type="button" className="primary-button mt-4 w-full" onClick={() => {
+                            if (hasSimulation && !window.confirm('Abrir este escenario sustituirá los datos actuales del simulador. Exporta primero tu simulación si quieres conservarla. ¿Continuar?')) return;
+                            onOpenScenario(createViabilityScenario(data, results.maxLoanAmount, financingRatio));
+                          }}>Simular con el {Math.round(financingRatio * 100)}%</button>
                           <details className="mt-4 text-sm">
                             <summary className="cursor-pointer py-2 text-slate-300">Ver desglose de gastos</summary>
                             <dl className="mt-2 space-y-2 text-slate-300">{[['Tasación', costs.appraisal], ['Notaría', costs.notary], ['Gestoría', costs.agency], ['Registro', costs.registry], [data.isNewConstruction ? 'IVA estimado' : 'ITP estimado', costs.tax]].map(([label, value]) => <div key={label} className="flex flex-wrap justify-between gap-2"><dt>{label}</dt><dd>{formatCurrency(Number(value))}</dd></div>)}</dl>
@@ -240,18 +249,7 @@ const Viability: FC = () => {
                   <p className="mt-2">La financiación del 80%, 85% o 90% son escenarios de comparación, no ofertas garantizadas. Los gastos e impuestos son orientativos; confirma los que correspondan a tu compra.</p>
                 </div>
 
-                {/* Additional Info */}
-                <div className="p-4 bg-slate-700/40 border border-slate-600/30 rounded-lg">
-                  <h4 className="font-semibold text-slate-100 mb-2">Información del cálculo</h4>
-                  <div className="text-sm text-slate-300 space-y-1">
-                    <p>• Tasa de endeudamiento aplicada: <span className="text-brand font-medium">{formatPercentage(data.debtRatio)}</span></p>
-                    <p>• Basado en ingresos netos de: <span className="text-brand font-medium">{formatCurrency(data.monthlyNetIncome)}/mes</span></p>
-                    <p>• Tipo de interés considerado: <span className="text-brand font-medium">{formatPercentage(data.tin)}</span></p>
-                    <p>• Plazo del préstamo: <span className="text-brand font-medium">{data.loanTerm} años</span></p>
-                    <p>• Comunidad Autónoma: <span className="text-brand font-medium">{data.region}</span></p>
-                    <p>• Tipo de vivienda: <span className="text-brand font-medium">{data.isNewConstruction ? 'Obra nueva (IVA 10%)' : `Segunda mano (ITP ${ITP_RATES[data.region]}%)`}</span></p>
-                  </div>
-                </div>
+
               </div>
             )}
           </div>

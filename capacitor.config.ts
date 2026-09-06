@@ -4,6 +4,9 @@ const config: CapacitorConfig = {
   appId: 'com.hipotecalab.app',
   appName: 'HipotecaLab',
   webDir: 'dist',
+  plugins: {
+    SystemBars: { style: 'DARK' }
+  },
   server: {
     androidScheme: 'https'
   },

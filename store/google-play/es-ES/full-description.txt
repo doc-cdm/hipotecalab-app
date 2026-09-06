@@ -1,0 +1,20 @@
+Entiende los números de tu próxima vivienda con HipotecaLab. Explora cómo cambian las cuotas de una hipoteca, estima tu presupuesto de compra y familiarízate con los conceptos hipotecarios en una misma app.
+
+SIMULA TU HIPOTECA
+Ajusta el precio de la vivienda, la entrada, el tipo de interés y el plazo para explorar distintos escenarios de una hipoteca a tipo fijo. Consulta la cuota mensual, los gastos de compra y la tabla de amortización. Exporta los resultados a PDF o Excel para revisarlos después.
+
+ESTIMA TU PRESUPUESTO
+Introduce tus ingresos y el porcentaje de endeudamiento para obtener una estimación de la vivienda que podrías permitirte. Ajusta el plazo, el interés y los supuestos de compra, con opciones para vivienda nueva o usada y comunidad autónoma en España.
+
+ENTIENDE LOS CONCEPTOS
+Consulta recursos y explicaciones sobre el proceso de compra, los gastos y los términos que aparecen al hablar de una hipoteca.
+
+APRENDE PRACTICANDO
+Pon a prueba tus conocimientos con preguntas, explicaciones, niveles y logros. Tu progreso se guarda localmente en el dispositivo.
+
+SIN REGISTRO
+Usa las herramientas sin crear una cuenta. Los cálculos se realizan en tu dispositivo y tú decides cuándo exportar los resultados.
+
+HipotecaLab es una herramienta informativa y educativa. Las simulaciones son orientativas y dependen de los datos y supuestos utilizados. No constituyen asesoramiento financiero, fiscal o jurídico, una oferta bancaria ni una aprobación de financiación. HipotecaLab no concede préstamos ni tramita solicitudes. Contrasta las condiciones y los gastos aplicables con la documentación oficial y los profesionales correspondientes antes de tomar decisiones.
+
+Contacto: cdominguezmonferrer@gmail.com

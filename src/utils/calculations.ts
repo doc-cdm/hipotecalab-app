@@ -57,20 +57,17 @@ export const generateAmortizationTable = (
   monthlyInterestRate: number,
   numberOfPayments: number,
   monthlyPayment: number,
-  startDate: string,
-  monthlyExtraPayment = 0
+  startDate: string
 ): AmortizationRow[] => {
   if (
     !Number.isFinite(principal) ||
     !Number.isFinite(monthlyInterestRate) ||
     !Number.isFinite(numberOfPayments) ||
     !Number.isFinite(monthlyPayment) ||
-    !Number.isFinite(monthlyExtraPayment) ||
     principal <= 0 ||
     monthlyInterestRate < 0 ||
     numberOfPayments <= 0 ||
-    monthlyPayment <= 0 ||
-    monthlyExtraPayment < 0
+    monthlyPayment <= 0
   ) {
     return [];
   }
@@ -81,7 +78,7 @@ export const generateAmortizationTable = (
 
   for (let month = 1; month <= numberOfPayments; month++) {
     const interestPayment = remainingBalance * monthlyInterestRate;
-    const scheduledPayment = monthlyPayment + monthlyExtraPayment;
+    const scheduledPayment = monthlyPayment;
     const principalPayment = Math.min(
       remainingBalance,
       Math.max(0, scheduledPayment - interestPayment)

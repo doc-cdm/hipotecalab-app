@@ -1,10 +1,6 @@
 import { useCallback, useMemo, useState } from 'react';
 import type { SimulationData, SimulationInputs, UpdateCosts, UpdateSimulation } from '../../types/simulation';
-import {
-  calculateMonthlyPayment,
-  calculateTotalInvestment,
-  generateAmortizationTable,
-} from '../../utils/calculations';
+import { calculateSimulation } from './model';
 
 const getLocalDate = (): string => {
   const date = new Date();
@@ -47,27 +43,7 @@ export const useSimulation = () => {
   }, []);
 
   const simulationData = useMemo<SimulationData>(() => {
-    const totalInvestment = calculateTotalInvestment(inputs.propertyPrice, inputs.costs);
-    const principal = Math.max(0, totalInvestment - inputs.initialContribution);
-    const monthlyInterestRate = inputs.tin / 100 / 12;
-    const numberOfPayments = inputs.loanTerm * 12;
-    const monthlyPayment = calculateMonthlyPayment(principal, monthlyInterestRate, numberOfPayments);
-    const monthlyPaymentWithExtras = monthlyPayment + inputs.monthlyExtras;
-    const amortizationTable = generateAmortizationTable(
-      principal,
-      monthlyInterestRate,
-      numberOfPayments,
-      monthlyPayment,
-      inputs.startDate,
-      inputs.monthlyExtras
-    );
-
-    return {
-      ...inputs,
-      monthlyPayment,
-      monthlyPaymentWithExtras,
-      amortizationTable,
-    };
+    return calculateSimulation(inputs);
   }, [inputs]);
 
   return { simulationData, updateSimulation, updateCosts };

@@ -40,12 +40,4 @@ describe('mortgage calculations', () => {
     expect(table[table.length - 1]?.remainingBalance).toBe(0);
   });
 
-  it('uses extra monthly payments to shorten the repayment period', () => {
-    const withoutExtras = generateAmortizationTable(1_200, 0, 12, 100, '2026-01-01');
-    const withExtras = generateAmortizationTable(1_200, 0, 12, 100, '2026-01-01', 50);
-
-    expect(withoutExtras).toHaveLength(12);
-    expect(withExtras).toHaveLength(8);
-    expect(withExtras.reduce((sum, row) => sum + row.payment, 0)).toBeCloseTo(1_200, 8);
-  });
 });

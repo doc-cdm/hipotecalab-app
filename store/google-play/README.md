@@ -12,7 +12,7 @@ Material preparado el 6 de septiembre de 2026 para la ficha principal en españo
 | Correo de soporte | `es-ES/contact-email.txt` | Contacto ya utilizado en la app |
 | Icono | `es-ES/images/icon.png` | PNG RGBA, 512 × 512; derivado del icono existente |
 | Gráfico de funciones | `es-ES/images/feature-graphic.png` | PNG RGB sin alfa, 1024 × 500 |
-| Capturas de teléfono | `es-ES/images/phone-screenshots/*.png` | Cinco capturas reales, 1080 × 1920, relación 9:16 |
+| Capturas de teléfono | `es-ES/images/phone-screenshots/*.png` | Seis capturas reales, 1080 × 1920, relación 9:16 |
 
 Los archivos de texto contienen únicamente el contenido que debe copiarse en cada campo. La categoría sugerida es **Finanzas** y el tipo es **Aplicación**. Países, precio y datos del titular deben decidirse y completarse en la cuenta; no se han establecido desde el repositorio.
 
@@ -29,6 +29,7 @@ En Play Console, abre **Aumentar usuarios → Presencia en Google Play Store →
 | `03-viabilidad.png` | Formulario para estimar el presupuesto de compra según ingresos, endeudamiento, interés y plazo. |
 | `04-recursos.png` | Diccionario hipotecario con buscador y conceptos como TIN, TAE y euríbor. |
 | `05-aprende.png` | Preguntas de aprendizaje hipotecario con progreso, nivel, rendimiento y logros. |
+| `06-resumen.png` | Resumen con la cuota hipotecaria, el gasto mensual y el ahorro destinado a la compra. |
 
 ## Procedencia y reproducción
 
@@ -65,9 +66,9 @@ La firma del AAB, la URL pública de privacidad y las declaraciones de contenido
 
 ## Comprobaciones realizadas
 
-- `npm run check`: lint, TypeScript, 13 pruebas y build correctos tras eliminar el import sin usar `ShieldCheck`.
+- `npm run check`: lint, TypeScript, 16 pruebas y build correctos tras eliminar el import sin usar `ShieldCheck`.
 - `:app:assembleDebug --offline`: correcto; APK instalado y abierto en Android 16.
-- Inspección visual de las cinco capturas y del gráfico.
+- Inspección visual de las seis capturas y del gráfico.
 - Longitudes de textos, dimensiones, modos de color y tamaños de los PNG verificados localmente.
 
 ## Fuentes oficiales
@@ -75,3 +76,5 @@ La firma del AAB, la URL pública de privacidad y las declaraciones de contenido
 - [Recursos gráficos y textos de la ficha](https://support.google.com/googleplay/android-developer/answer/9866151?hl=es).
 - [Crear y configurar una aplicación](https://support.google.com/googleplay/android-developer/answer/9859152?hl=es).
 - [Pruebas para nuevas cuentas personales](https://support.google.com/googleplay/android-developer/answer/14151465?hl=es).
+
+Las capturas se actualizaron tras la revisión UX/UI: continuidad entre herramientas, resumen simplificado y barras de Android con iconos claros. Se verificaron en el emulador la conservación de datos, paso y desplazamiento, comparación de opciones y apertura de escenarios de Viabilidad. Los formularios se conservan durante la sesión, no después de recargar o cerrar el proceso.

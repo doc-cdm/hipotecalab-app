@@ -16,25 +16,25 @@ const PaymentTab: React.FC<TabProps> = ({
   return (
     <div className="p-6 max-w-4xl mx-auto">
       <div className="bg-slate-800 rounded-lg p-6">
-        <h2 className="text-2xl font-bold text-orange-500 mb-6">Cuota mensual</h2>
+        <h2 className="text-2xl font-bold text-brand mb-6">Cuota mensual</h2>
         
         <div className="space-y-6">
           {/* Payment Results */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="bg-slate-700 rounded-lg p-6 text-center">
               <h3 className="text-lg font-semibold text-slate-200 mb-2">
-                Cuota mensual sin extras
+                Cuota de la hipoteca
               </h3>
-              <div className="text-3xl font-bold text-orange-500">
+              <div className="text-3xl font-bold text-brand">
                 {formatCurrency(simulationData.monthlyPayment)}
               </div>
             </div>
 
             <div className="bg-slate-700 rounded-lg p-6 text-center">
               <h3 className="text-lg font-semibold text-slate-200 mb-2">
-                Cuota mensual con seguros y otros gastos
+                Gasto mensual con seguros y otros gastos
               </h3>
-              <div className="text-3xl font-bold text-orange-500">
+              <div className="text-3xl font-bold text-brand">
                 {formatCurrency(simulationData.monthlyPaymentWithExtras)}
               </div>
             </div>
@@ -88,7 +88,7 @@ const PaymentTab: React.FC<TabProps> = ({
             disabled={!canGoNext || !isCalculated}
             className={`flex items-center space-x-2 px-6 py-2 rounded-md font-medium transition-colors ${
               canGoNext && isCalculated
-                ? 'bg-orange-500 hover:bg-orange-600 text-white'
+                ? 'bg-brand hover:bg-brand-hover text-white'
                 : 'bg-slate-600 text-slate-400 cursor-not-allowed'
             }`}
           >

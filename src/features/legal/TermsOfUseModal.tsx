@@ -1,6 +1,5 @@
-import { Download, X } from 'lucide-react';
-import { downloadTextFile } from '../../shared/utils/downloadTextFile';
-import { buildLegalDocumentText, type LegalSection } from './legalText';
+import { X } from 'lucide-react';
+import type { LegalSection } from './legalText';
 
 interface TermsOfUseModalProps {
   isOpen: boolean;
@@ -118,20 +117,8 @@ const termsSections: LegalSection[] = [
   },
 ];
 
-const buildDownloadText = () => buildLegalDocumentText({
-  title: 'TÉRMINOS DE USO DE HIPOTECALAB',
-  lastUpdated: LAST_UPDATED,
-  version: TERMS_VERSION,
-  introduction: 'Lee estos términos antes de utilizar HipotecaLab. Describen el servicio, sus límites y las reglas aplicables a su uso.',
-  sections: termsSections,
-});
-
 const TermsOfUseModal = ({ isOpen, onClose }: TermsOfUseModalProps) => {
   if (!isOpen) return null;
-
-  const downloadTerms = () => {
-    downloadTextFile('Terminos-Uso-HipotecaLab.txt', buildDownloadText());
-  };
 
   return (
     <div
@@ -154,15 +141,6 @@ const TermsOfUseModal = ({ isOpen, onClose }: TermsOfUseModalProps) => {
           </div>
           <div className="flex items-center space-x-2">
             <button
-              onClick={downloadTerms}
-              className="flex items-center space-x-2 px-3 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-lg transition-colors text-sm font-medium"
-              aria-label="Descargar términos de uso como archivo de texto"
-              type="button"
-            >
-              <Download size={16} />
-              <span>Descargar</span>
-            </button>
-            <button
               onClick={onClose}
               className="p-2 hover:bg-slate-700 rounded-lg transition-colors"
               aria-label="Cerrar términos de uso"
@@ -179,13 +157,6 @@ const TermsOfUseModal = ({ isOpen, onClose }: TermsOfUseModalProps) => {
               Lee estos términos antes de utilizar HipotecaLab. Describen el servicio, sus límites y las reglas
               aplicables a su uso.
             </p>
-
-            <div className="rounded-lg border border-orange-500/30 bg-orange-500/10 p-4">
-              <p className="text-sm text-slate-200">
-                En resumen: HipotecaLab es una herramienta gratuita e informativa. Sus resultados son estimaciones,
-                no ofertas bancarias ni asesoramiento profesional.
-              </p>
-            </div>
 
             {termsSections.map((section) => (
               <section key={section.title}>
@@ -207,7 +178,7 @@ const TermsOfUseModal = ({ isOpen, onClose }: TermsOfUseModalProps) => {
               <p>Madrid, España</p>
               <p>
                 Email:{' '}
-                <a href="mailto:cdominguezmonferrer@gmail.com" className="text-orange-400 hover:text-orange-300 underline">
+                <a href="mailto:cdominguezmonferrer@gmail.com" className="text-brand hover:text-brand-hover underline">
                   cdominguezmonferrer@gmail.com
                 </a>
               </p>

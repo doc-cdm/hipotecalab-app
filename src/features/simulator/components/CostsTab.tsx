@@ -60,38 +60,38 @@ const CostsTab: React.FC<TabProps> = ({
     }
   ];
 
-  const isFormValid = simulationData.name.trim() !== '' && simulationData.propertyPrice > 0;
+  const isFormValid = simulationData.name.trim() !== '' && simulationData.propertyPrice > 0 && Number.isFinite(simulationData.propertyPrice) && Object.values(simulationData.costs).every(value => Number.isFinite(value) && value >= 0);
 
   return (
     <div className="p-6 max-w-4xl mx-auto">
       <div className="bg-slate-800 rounded-lg p-6">
-        <h2 className="text-2xl font-bold text-orange-500 mb-6">Costes iniciales</h2>
+        <h2 className="text-2xl font-bold text-brand mb-6">Costes iniciales</h2>
         
         <div className="space-y-6">
           {/* Simulation Name */}
           <div>
-            <label className="block text-sm font-medium text-slate-300 mb-2">
+            <label htmlFor="simulation-name" className="block text-sm font-medium text-slate-300 mb-2">
               Nombre de la simulación *
             </label>
-            <input
+            <input id="simulation-name"
               type="text"
               value={simulationData.name}
               onChange={(e) => handleInputChange('name', e.target.value)}
-              className="w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded-md text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+              className="w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded-md text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent"
               placeholder="Ej: Casa en Madrid Centro"
             />
           </div>
 
           {/* Property Price */}
           <div>
-            <label className="block text-sm font-medium text-slate-300 mb-2">
+            <label htmlFor="property-price" className="block text-sm font-medium text-slate-300 mb-2">
               Precio de la vivienda (sin impuestos) *
             </label>
-            <input
+            <input id="property-price"
               type="number"
               value={simulationData.propertyPrice || ''}
               onChange={(e) => handleInputChange('propertyPrice', e.target.value)}
-              className="w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded-md text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+              className="w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded-md text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent"
               placeholder="0"
             />
           </div>
@@ -103,16 +103,17 @@ const CostsTab: React.FC<TabProps> = ({
               {costItems.map((item) => (
                 <div key={item.key} className="space-y-2">
                   <div className="flex items-center space-x-2">
-                    <label className="block text-sm font-medium text-slate-300">
+                    <label htmlFor={`cost-${item.key}`} className="block text-sm font-medium text-slate-300">
                       {item.label}
                     </label>
                     <HelpTooltip content={item.help} />
                   </div>
                   <input
                     type="number"
+                    id={`cost-${item.key}`}
                     value={item.value || ''}
                     onChange={(e) => handleInputChange(`costs.${item.key}`, e.target.value)}
-                    className="w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded-md text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                    className="w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded-md text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent"
                     placeholder="0"
                   />
                   <p className="text-xs text-slate-400">Referencia: {item.reference}</p>
@@ -123,17 +124,17 @@ const CostsTab: React.FC<TabProps> = ({
             {/* Tax Rate */}
             <div className="mt-4">
               <div className="flex items-center space-x-2 mb-2">
-                <label className="block text-sm font-medium text-slate-300">
+                <label htmlFor="tax-rate" className="block text-sm font-medium text-slate-300">
                   IVA/ITP (%)
                 </label>
                 <HelpTooltip content="Impuesto sobre Transmisiones Patrimoniales (ITP) para vivienda de segunda mano o IVA para vivienda nueva. Varía entre 6-10% según la comunidad autónoma." />
               </div>
-              <input
+              <input id="tax-rate"
                 type="number"
                 step="0.1"
                 value={simulationData.costs.taxRate || ''}
                 onChange={(e) => handleInputChange('costs.taxRate', e.target.value)}
-                className="w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded-md text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                className="w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded-md text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent"
                 placeholder="10"
               />
               <p className="text-xs text-slate-400 mt-1">Referencia: 6-10% según CCAA</p>
@@ -142,29 +143,30 @@ const CostsTab: React.FC<TabProps> = ({
 
           {/* Total Investment */}
           <div className="bg-slate-700 rounded-lg p-4">
-            <div className="flex justify-between items-center">
+            <div className="flex flex-col sm:flex-row justify-between gap-2 sm:items-center">
               <span className="text-lg font-semibold text-slate-200">
                 Coste total de la inversión
               </span>
-              <span className="text-2xl font-bold text-orange-500">
+              <span className="text-2xl font-bold text-brand">
                 {formatCurrency(totalInvestment)}
               </span>
             </div>
           </div>
         </div>
 
+        {!isFormValid && <p className="mt-5 text-sm text-slate-300">Para continuar, da un nombre a la simulación e introduce el precio de la vivienda. Los gastos deben ser positivos o cero.</p>}
         {/* Navigation */}
         <div className="flex justify-center mt-8">
           <button
             onClick={onNext}
             disabled={!canGoNext || !isFormValid}
-            className={`flex items-center space-x-2 px-6 py-2 rounded-md font-medium transition-colors ${
+            className={`w-full justify-center flex items-center space-x-2 px-6 py-3 rounded-xl font-medium transition-colors ${
               canGoNext && isFormValid
-                ? 'bg-orange-500 hover:bg-orange-600 text-white'
+                ? 'bg-brand hover:bg-brand-hover text-slate-950'
                 : 'bg-slate-600 text-slate-400 cursor-not-allowed'
             }`}
           >
-            <span>Siguiente</span>
+            <span>Continuar al préstamo</span>
             <ChevronRight size={16} />
           </button>
         </div>

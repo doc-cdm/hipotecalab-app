@@ -15,7 +15,7 @@ const AmortizationTab: React.FC<TabProps> = ({
   return (
     <div className="p-6 max-w-7xl mx-auto">
       <div className="bg-slate-800 rounded-lg p-6">
-        <h2 className="text-2xl font-bold text-orange-500 mb-6">Tabla de amortización</h2>
+        <h2 className="text-2xl font-bold text-brand mb-6">Tabla de amortización</h2><p className="text-sm text-slate-300 mb-5">Solo incluye la cuota de la hipoteca: capital e intereses. Los seguros y otros gastos no amortizan el préstamo.</p>
         
         {hasData ? (
           <div className="space-y-4">
@@ -70,7 +70,7 @@ const AmortizationTab: React.FC<TabProps> = ({
                         <td className="py-2 px-2 text-right text-red-400">{formatCurrency(row.interest)}</td>
                         <td className="py-2 px-2 text-right text-green-400">{formatCurrency(row.principal)}</td>
                         <td className="py-2 px-2 text-right text-slate-300">{formatCurrency(row.remainingBalance)}</td>
-                        <td className="py-2 px-2 text-right text-orange-400">{formatCurrency(row.amortizedCapital)}</td>
+                        <td className="py-2 px-2 text-right text-brand">{formatCurrency(row.amortizedCapital)}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -109,7 +109,7 @@ const AmortizationTab: React.FC<TabProps> = ({
             disabled={!canGoNext || !hasData}
             className={`flex items-center space-x-2 px-6 py-2 rounded-md font-medium transition-colors ${
               canGoNext && hasData
-                ? 'bg-orange-500 hover:bg-orange-600 text-white'
+                ? 'bg-brand hover:bg-brand-hover text-white'
                 : 'bg-slate-600 text-slate-400 cursor-not-allowed'
             }`}
           >

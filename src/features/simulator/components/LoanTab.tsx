@@ -34,7 +34,7 @@ const LoanTab: React.FC<TabProps> = ({
   return (
     <div className="p-6 max-w-4xl mx-auto">
       <div className="bg-slate-800 rounded-lg p-6">
-        <h2 className="text-2xl font-bold text-orange-500 mb-6">Detalles del préstamo</h2>
+        <h2 className="text-2xl font-bold text-brand mb-6">Detalles del préstamo</h2>
         
         <div className="space-y-6">
           {/* Initial Contribution */}
@@ -46,7 +46,7 @@ const LoanTab: React.FC<TabProps> = ({
               type="number"
               value={simulationData.initialContribution || ''}
               onChange={(e) => handleInputChange('initialContribution', e.target.value)}
-              className="w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded-md text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+              className="w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded-md text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent"
               placeholder="0"
             />
           </div>
@@ -74,7 +74,7 @@ const LoanTab: React.FC<TabProps> = ({
                 <span className="text-sm font-medium text-slate-300">
                   Financiación solicitada
                 </span>
-                <span className="text-xl font-bold text-orange-500">
+                <span className="text-xl font-bold text-brand">
                   {formatCurrency(requestedFinancing)}
                 </span>
               </div>
@@ -95,7 +95,7 @@ const LoanTab: React.FC<TabProps> = ({
                 step="0.01"
                 value={simulationData.tin || ''}
                 onChange={(e) => handleInputChange('tin', e.target.value)}
-                className="w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded-md text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                className="w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded-md text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent"
                 placeholder="2.30"
               />
             </div>
@@ -112,7 +112,7 @@ const LoanTab: React.FC<TabProps> = ({
                 step="0.01"
                 value={simulationData.tae || ''}
                 onChange={(e) => handleInputChange('tae', e.target.value)}
-                className="w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded-md text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                className="w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded-md text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent"
                 placeholder="2.80"
               />
             </div>
@@ -127,7 +127,7 @@ const LoanTab: React.FC<TabProps> = ({
               type="date"
               value={simulationData.startDate}
               onChange={(e) => handleInputChange('startDate', e.target.value)}
-              className="w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+              className="w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent"
             />
           </div>
 
@@ -140,7 +140,7 @@ const LoanTab: React.FC<TabProps> = ({
               type="number"
               value={simulationData.loanTerm || ''}
               onChange={(e) => handleInputChange('loanTerm', e.target.value)}
-              className="w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded-md text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+              className="w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded-md text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent"
               placeholder="25"
             />
           </div>
@@ -157,7 +157,7 @@ const LoanTab: React.FC<TabProps> = ({
               type="number"
               value={simulationData.monthlyExtras || ''}
               onChange={(e) => handleInputChange('monthlyExtras', e.target.value)}
-              className="w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded-md text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+              className="w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded-md text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent"
               placeholder="0"
             />
           </div>
@@ -183,7 +183,7 @@ const LoanTab: React.FC<TabProps> = ({
             disabled={!canGoNext || !isFormValid}
             className={`flex items-center space-x-2 px-6 py-2 rounded-md font-medium transition-colors ${
               canGoNext && isFormValid
-                ? 'bg-orange-500 hover:bg-orange-600 text-white'
+                ? 'bg-brand hover:bg-brand-hover text-white'
                 : 'bg-slate-600 text-slate-400 cursor-not-allowed'
             }`}
           >

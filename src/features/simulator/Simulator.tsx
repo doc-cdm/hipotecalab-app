@@ -67,11 +67,18 @@ const Simulator: React.FC = () => {
 
   return (
     <div className="h-full flex flex-col">
+      <div className="step-heading">
+        <p className="brand-eyebrow mb-2">SIMULADOR</p>
+        <h1 className="text-2xl font-semibold">Tu hipoteca, paso a paso</h1>
+        <p className="mt-2 text-sm text-slate-300">Empieza por la vivienda y explora cómo cambia el resultado.</p>
+        <p className="mt-4 text-xs text-brand" aria-live="polite">Paso {getCurrentTabIndex() + 1} de {tabs.length} · {tabs[getCurrentTabIndex()].label}</p>
+        <div className="mt-2 flex gap-1.5" aria-hidden="true">{tabs.map((tab, index) => <span key={tab.id} className={`h-1 flex-1 rounded-full ${index <= getCurrentTabIndex() ? 'bg-brand' : 'bg-slate-700'}`} />)}</div>
+      </div>
       {/* Tab Navigation */}
       <div className="bg-slate-800 border-b border-slate-700 px-2 py-2">
         <div className="flex justify-center">
           <div 
-            className="flex overflow-x-auto gap-2"
+            className="flex overflow-x-auto gap-1 w-full max-w-4xl"
             style={{ WebkitOverflowScrolling: 'touch' }}
           >
             {tabs.map(({ id, label }) => {
@@ -79,17 +86,18 @@ const Simulator: React.FC = () => {
               return (
                 <button
                   key={id}
+                  aria-current={isActive ? 'step' : undefined}
                   onClick={() => setActiveTab(id)}
-                  className={`relative flex-shrink-0 flex flex-col items-center min-w-[72px] space-y-1 px-3 py-2 rounded-md transition-colors ${
+                  className={`relative flex-shrink-0 flex flex-col items-center min-w-0 flex-1 space-y-1 px-1 py-2 rounded-md transition-colors ${
                     isActive
                       ? 'bg-slate-700/60'
                       : 'hover:bg-slate-700/40'
                   }`}
                 >
                   {isActive && (
-                    <span className="absolute top-0 left-1/2 -translate-x-1/2 w-6 h-0.5 rounded-full bg-orange-500" />
+                    <span className="absolute top-0 left-1/2 -translate-x-1/2 w-6 h-0.5 rounded-full bg-brand" />
                   )}
-                  <span className={`text-xs font-medium ${isActive ? 'text-orange-400' : 'text-slate-400'}`}>{label}</span>
+                  <span className={`text-xs font-medium ${isActive ? 'text-brand' : 'text-slate-400'}`}>{label}</span>
                 </button>
               );
             })}

@@ -1,10 +1,10 @@
-import { useState, Suspense, lazy } from 'react';
-import { Menu, Home, Shield, FileText } from 'lucide-react';
+import { useState, useEffect, useRef, Suspense, lazy } from 'react';
+import { Menu, Home, Shield, FileText, ArrowLeft, X } from 'lucide-react';
 import PrivacyPolicyModal from './features/legal/PrivacyPolicyModal';
 import TermsOfUseModal from './features/legal/TermsOfUseModal';
 import HomeScreen from './features/home/Home';
 import MainMenu from './features/home/MainMenu';
-import FloatingParticles from './shared/components/FloatingParticles';
+import SectionBoundary from './shared/components/SectionBoundary';
 import { NAVIGATION_SECTIONS } from './app/navigation';
 import { useSectionNavigation } from './app/useSectionNavigation';
 
@@ -14,12 +14,13 @@ const Viability = lazy(() => import('./features/viability/Viability'));
 const Resources = lazy(() => import('./features/resources/Resources'));
 const Learning = lazy(() => import('./features/learning/Learning'));
 
-// Componente de loading optimizado
 const LoadingSpinner = () => (
-  <div className="flex items-center justify-center min-h-screen bg-slate-900">
-    <div className="flex flex-col items-center space-y-4">
-      <div className="w-8 h-8 border-4 border-orange-500 border-t-transparent rounded-full animate-spin"></div>
-      <p className="text-slate-300 text-sm">Cargando...</p>
+  <div role="status" aria-live="polite" className="mx-auto max-w-4xl p-6">
+    <p className="text-sm text-slate-300 mb-6">Preparando tu herramienta…</p>
+    <div aria-hidden="true" className="space-y-5 animate-pulse">
+      <div className="h-8 w-2/3 rounded-lg bg-slate-700" />
+      <div className="h-52 rounded-2xl bg-slate-800" />
+      <div className="h-12 rounded-xl bg-slate-700" />
     </div>
   </div>
 );
@@ -30,6 +31,39 @@ function App() {
   const [isPrivacyModalOpen, setIsPrivacyModalOpen] = useState(false);
   const [isTermsModalOpen, setIsTermsModalOpen] = useState(false);
 
+  const menuRef = useRef<HTMLDivElement>(null);
+  const menuTriggerRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    document.title = `${NAVIGATION_SECTIONS.find(section => section.id === activeSection)?.label ?? 'Inicio'} · HipotecaLab`;
+    window.scrollTo(0, 0);
+    document.getElementById('main-content')?.focus({ preventScroll: true });
+  }, [activeSection]);
+
+  useEffect(() => {
+    if (!isMenuOpen) return;
+    const trigger = menuTriggerRef.current;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    const buttons = () => Array.from(menuRef.current?.querySelectorAll<HTMLButtonElement>('button') ?? []);
+    buttons()[0]?.focus();
+    const handleKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setIsMenuOpen(false);
+      if (event.key !== 'Tab') return;
+      const items = buttons();
+      const first = items[0];
+      const last = items[items.length - 1];
+      if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last?.focus(); }
+      else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first?.focus(); }
+    };
+    document.addEventListener('keydown', handleKey);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      document.removeEventListener('keydown', handleKey);
+      trigger?.focus();
+    };
+  }, [isMenuOpen]);
+
   const renderActiveSection = () => {
     switch (activeSection) {
       case 'home':
@@ -39,7 +73,6 @@ function App() {
       case 'simulator':
         return (
           <div className="relative overflow-hidden">
-            <FloatingParticles />
             <div className="relative z-10">
               <Suspense fallback={<LoadingSpinner />}>
                 <Simulator />
@@ -50,7 +83,6 @@ function App() {
       case 'viability':
         return (
           <div className="relative overflow-hidden">
-            <FloatingParticles />
             <div className="relative z-10">
               <Suspense fallback={<LoadingSpinner />}>
                 <Viability />
@@ -61,7 +93,6 @@ function App() {
       case 'resources':
         return (
           <div className="relative overflow-hidden">
-            <FloatingParticles />
             <div className="relative z-10">
               <Suspense fallback={<LoadingSpinner />}>
                 <Resources />
@@ -72,7 +103,6 @@ function App() {
       case 'learning':
         return (
           <div className="relative overflow-hidden">
-            <FloatingParticles />
             <div className="relative z-10">
               <Suspense fallback={<LoadingSpinner />}>
                 <Learning />
@@ -90,69 +120,24 @@ function App() {
       {/* Skip Links for Accessibility */}
       <a
         href="#main-content"
-        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-orange-500 focus:text-white focus:rounded-md focus:no-underline"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-brand focus:text-white focus:rounded-md focus:no-underline"
         tabIndex={0}
       >
         Saltar al contenido principal
       </a>
 
-      {/* Top Bar */}
-      {(activeSection !== 'home' && activeSection !== 'main-menu') && (
-        <header className="bg-slate-800 border-b border-slate-700 px-4 pb-3 flex items-center justify-between" style={{ paddingTop: 'max(12px, env(safe-area-inset-top))' }}>
-          <div className="flex items-center space-x-4">
-            <div className="flex items-center space-x-3">
-              <button
-                onClick={() => setActiveSection('main-menu')}
-                className="font-bold text-xl text-white hover:text-orange-400 transition-colors cursor-pointer"
-                style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif' }}
-                aria-label="Ir al menú principal de HipotecaLab"
-                type="button"
-              >
-                <span className="text-orange-500">H</span>Lab
-              </button>
-            </div>
-          </div>
-
-          <button
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="p-2 hover:bg-slate-700 rounded-md transition-colors"
-            aria-label={isMenuOpen ? "Cerrar menú de navegación" : "Abrir menú de navegación"}
-            type="button"
-          >
-            <Menu size={20} />
-          </button>
-        </header>
-      )}
-
-      {/* Top Bar for Home and Main Menu */}
-      {(activeSection === 'home' || activeSection === 'main-menu') && (
-        <header className="absolute top-0 left-0 right-0 z-20 bg-transparent px-4 pb-3 flex items-center justify-between" style={{ paddingTop: 'max(12px, env(safe-area-inset-top))' }}>
-          <div className="flex items-center space-x-4">
-            <div className="flex items-center space-x-3">
-              {activeSection === 'main-menu' && (
-                <button
-                  onClick={() => setActiveSection('main-menu')}
-                  className="font-bold text-xl text-white hover:text-orange-400 transition-colors cursor-pointer"
-                  style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif' }}
-                  aria-label="Ir al menú principal de HipotecaLab"
-                  type="button"
-                >
-                  <span className="text-orange-500">H</span>Lab
-                </button>
-              )}
-            </div>
-          </div>
-
-          <button
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="p-2 hover:bg-slate-700 rounded-md transition-colors"
-            aria-label={isMenuOpen ? "Cerrar menú de navegación" : "Abrir menú de navegación"}
-            type="button"
-          >
-            <Menu size={20} />
-          </button>
-        </header>
-      )}
+      <header className="app-header">
+        <div className="mx-auto max-w-5xl flex items-center justify-between gap-3">
+          {activeSection !== 'home' && activeSection !== 'main-menu' ? (
+            <button type="button" onClick={() => setActiveSection('main-menu')} className="flex items-center gap-2 text-sm font-medium px-2" aria-label="Volver al menú principal">
+              <ArrowLeft size={20} aria-hidden="true" /> Menú principal
+            </button>
+          ) : (
+            <img src="/icons/icon-master.svg" alt="HipotecaLab" className="h-12 w-20 object-cover" />
+          )}
+          <button ref={menuTriggerRef} onClick={() => setIsMenuOpen(true)} className="px-3 rounded-xl hover:bg-slate-700" aria-label="Abrir menú de navegación" aria-expanded={isMenuOpen} aria-controls="app-menu" type="button"><Menu size={22} /></button>
+        </div>
+      </header>
 
       {/* Menu Dropdown */}
       {isMenuOpen && (
@@ -164,7 +149,7 @@ function App() {
           ></div>
 
           {/* Sidebar Menu */}
-          <aside className="fixed top-0 right-0 h-full w-72 max-w-[85vw] bg-slate-800 shadow-xl z-50 transform transition-transform duration-300 ease-in-out" role="navigation" aria-label="Menú de navegación lateral">
+          <div ref={menuRef} id="app-menu" role="dialog" aria-modal="true" aria-label="Menú de navegación" className="fixed top-0 right-0 h-full w-72 max-w-[85vw] bg-slate-800 shadow-xl z-50 transform transition-transform duration-300 ease-in-out">
             <div className="flex flex-col h-full">
               {/* Header */}
               <div className="flex items-center justify-between px-4 pb-4 border-b border-slate-700" style={{ paddingTop: 'max(16px, env(safe-area-inset-top))' }}>
@@ -175,9 +160,7 @@ function App() {
                   aria-label="Cerrar menú de navegación"
                   type="button"
                 >
-                  <svg className="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                  </svg>
+                  <X size={20} aria-hidden="true" />
                 </button>
               </div>
 
@@ -219,11 +202,12 @@ function App() {
                                 setActiveSection(id);
                               }}
                               className={`w-full flex items-center space-x-3 px-4 py-3 text-left rounded-lg transition-colors ${isActive ? 'bg-slate-700' : 'hover:bg-slate-700'}`}
-                              aria-label={`Ir a la sección ${label}`}
+                              aria-current={isActive ? 'page' : undefined}
+                    aria-label={`Ir a la sección ${label}`}
                               type="button"
                             >
-                              <Icon size={18} className={isActive ? 'text-orange-100' : 'text-slate-400'} />
-                              <span className={isActive ? 'text-orange-100' : 'text-white'}>{label}</span>
+                              <Icon size={18} className={isActive ? 'text-brand' : 'text-slate-400'} />
+                              <span className={isActive ? 'text-brand' : 'text-white'}>{label}</span>
                             </button>
                           );
                         })}
@@ -267,20 +251,20 @@ function App() {
                 </div>
               </div>
             </div>
-          </aside>
+          </div>
         </>
       )}
 
       {/* Main Content */}
-      <main id="main-content" className={(activeSection === 'home' || activeSection === 'main-menu') ? 'min-h-screen' : 'min-h-screen flex flex-col'}>
+      <main id="main-content" tabIndex={-1} className={(activeSection === 'home' || activeSection === 'main-menu') ? 'min-h-screen' : 'app-content min-h-screen flex flex-col'}>
         <div className={(activeSection === 'home' || activeSection === 'main-menu') ? '' : 'flex-1 overflow-hidden'}>
-          {renderActiveSection()}
+          <SectionBoundary key={activeSection} onHome={() => setActiveSection('main-menu')}>{renderActiveSection()}</SectionBoundary>
         </div>
 
         {/* Bottom Navigation */}
         {(activeSection !== 'home' && activeSection !== 'main-menu') && (
           <nav
-            className="bg-slate-800 border-t border-slate-700 px-2 pt-2 overflow-x-auto no-scrollbar"
+            className="bottom-nav"
             style={{ paddingBottom: 'max(8px, env(safe-area-inset-bottom))' }}
             role="navigation"
             aria-label="Navegación principal de secciones"
@@ -293,21 +277,22 @@ function App() {
                   <button
                     key={id}
                     onClick={() => setActiveSection(id)}
-                    className={`relative flex-shrink-0 flex flex-col items-center space-y-1 px-3 py-2 min-w-[70px] rounded-md transition-colors ${isActive
+                    className={`relative flex-1 min-w-0 flex flex-col items-center space-y-1 px-1 py-2 rounded-xl transition-colors ${isActive
                       ? 'bg-slate-700/60'
                       : 'hover:bg-slate-700/40'
                       }`}
+                    aria-current={isActive ? 'page' : undefined}
                     aria-label={`Ir a la sección ${label}`}
                     type="button"
                   >
                     {isActive && (
-                      <span className="absolute top-0 left-1/2 -translate-x-1/2 w-6 h-0.5 rounded-full bg-orange-500" />
+                      <span className="absolute top-0 left-1/2 -translate-x-1/2 w-6 h-0.5 rounded-full bg-brand" />
                     )}
                     <Icon
                       size={20}
-                      className={isActive ? 'text-orange-400' : 'text-slate-400'}
+                      className={isActive ? 'text-brand' : 'text-slate-400'}
                     />
-                    <span className={`text-xs whitespace-nowrap ${isActive ? 'text-orange-400' : 'text-slate-400'}`}>
+                    <span className={`text-xs whitespace-nowrap ${isActive ? 'text-brand' : 'text-slate-400'}`}>
                       {label}
                     </span>
                   </button>

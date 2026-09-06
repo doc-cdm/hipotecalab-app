@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import type { Section } from './navigation';
 
-const ROUTABLE_SECTIONS: Section[] = ['simulator', 'viability', 'resources', 'learning'];
+const ROUTABLE_SECTIONS: Section[] = ['main-menu', 'simulator', 'viability', 'resources', 'learning'];
 
 const getSectionFromUrl = (): Section => {
   const section = new URLSearchParams(window.location.search).get('section');
@@ -24,6 +24,7 @@ export const useSectionNavigation = () => {
     } else {
       url.searchParams.delete('section');
     }
+    if (url.href === window.location.href) return;
     window.history.pushState({}, '', url);
     setActiveSection(section);
   }, []);

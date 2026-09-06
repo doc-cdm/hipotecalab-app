@@ -1,6 +1,5 @@
-import { Download, X } from 'lucide-react';
-import { downloadTextFile } from '../../shared/utils/downloadTextFile';
-import { buildLegalDocumentText, type LegalSection } from './legalText';
+import { X } from 'lucide-react';
+import type { LegalSection } from './legalText';
 
 interface PrivacyPolicyModalProps {
   isOpen: boolean;
@@ -99,20 +98,8 @@ const policySections: LegalSection[] = [
   },
 ];
 
-const buildDownloadText = () => buildLegalDocumentText({
-  title: 'POLÍTICA DE PRIVACIDAD DE HIPOTECALAB',
-  lastUpdated: LAST_UPDATED,
-  version: POLICY_VERSION,
-  introduction: 'Esta política explica qué información utiliza HipotecaLab, para qué se usa y qué opciones tienes. No es necesario aceptar esta política para que sea válida como información sobre el tratamiento de datos.',
-  sections: policySections,
-});
-
 const PrivacyPolicyModal = ({ isOpen, onClose }: PrivacyPolicyModalProps) => {
   if (!isOpen) return null;
-
-  const downloadPolicy = () => {
-    downloadTextFile('Politica-Privacidad-HipotecaLab.txt', buildDownloadText());
-  };
 
   return (
     <div
@@ -135,15 +122,6 @@ const PrivacyPolicyModal = ({ isOpen, onClose }: PrivacyPolicyModalProps) => {
           </div>
           <div className="flex items-center space-x-2">
             <button
-              onClick={downloadPolicy}
-              className="flex items-center space-x-2 px-3 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-lg transition-colors text-sm font-medium"
-              aria-label="Descargar política de privacidad como archivo de texto"
-              type="button"
-            >
-              <Download size={16} />
-              <span>Descargar</span>
-            </button>
-            <button
               onClick={onClose}
               className="p-2 hover:bg-slate-700 rounded-lg transition-colors"
               aria-label="Cerrar política de privacidad"
@@ -160,13 +138,6 @@ const PrivacyPolicyModal = ({ isOpen, onClose }: PrivacyPolicyModalProps) => {
               Esta política explica qué información utiliza HipotecaLab, para qué se usa y qué opciones tienes.
               HipotecaLab funciona sin registro ni cuenta de usuario.
             </p>
-
-            <div className="rounded-lg border border-orange-500/30 bg-orange-500/10 p-4">
-              <p className="text-sm text-slate-200">
-                En resumen: los datos de tus cálculos se procesan en tu dispositivo y no se envían a HipotecaLab;
-                solo el progreso de Aprende y los recursos técnicos se conservan localmente.
-              </p>
-            </div>
 
             {policySections.map((section) => (
               <section key={section.title}>
@@ -188,7 +159,7 @@ const PrivacyPolicyModal = ({ isOpen, onClose }: PrivacyPolicyModalProps) => {
               <p>Madrid, España</p>
               <p>
                 Email:{' '}
-                <a href="mailto:cdominguezmonferrer@gmail.com" className="text-orange-400 hover:text-orange-300 underline">
+                <a href="mailto:cdominguezmonferrer@gmail.com" className="text-brand hover:text-brand-hover underline">
                   cdominguezmonferrer@gmail.com
                 </a>
               </p>

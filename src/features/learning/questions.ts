@@ -47,14 +47,14 @@ export const questions: Question[] = [
     correcta: 1, 
     explicacion: 'La entidad puede exigir un seguro de daños sobre la vivienda hipotecada; debe aceptar pólizas equivalentes si cumplen la cobertura solicitada.'
   },
-  { 
-    id: 'gastos_calculo_itp', 
-    tipo: 'quiz', 
-    dificultad: 'media', 
-    pregunta: '¿Sobre qué base se calcula el ITP en una compraventa?', 
-    opciones: ['Siempre sobre el valor catastral', 'Sobre el valor declarado o el valor comprobado por Hacienda (el mayor)', 'Solo sobre el coste de reforma', 'Sobre el precio más muebles'], 
-    correcta: 1, 
-    explicacion: 'Se liquida sobre el mayor entre el precio escriturado y el valor de referencia/comprobado por la Administración.'
+  {
+    id: 'gastos_calculo_itp',
+    tipo: 'quiz',
+    dificultad: 'media',
+    pregunta: '¿Sobre qué base se calcula el ITP en una compraventa?',
+    opciones: ['Siempre sobre el valor catastral', 'Sobre el mayor entre el precio/valor declarado y el "valor de referencia" del Catastro', 'Solo sobre el coste de reforma', 'Sobre el precio más muebles'],
+    correcta: 1,
+    explicacion: 'Desde 2022, la base imponible es el mayor entre el precio pactado y el "valor de referencia" que publica el Catastro; declarar por debajo no evita que Hacienda aplique ese valor de oficio.'
   },
   { 
     id: 'gastos_ahorro_necesario', 
@@ -931,6 +931,82 @@ export const questions: Question[] = [
     opciones: ['Nada', 'El tipo bonificado se mantiene', 'Se pierde la bonificación y sube el tipo pactado', 'Te multan siempre'], 
     correcta: 2, 
     explicacion: 'Las bonificaciones están condicionadas a mantener las vinculaciones; si se pierden, sube el TIN según contrato.'
+  },
+
+  // TIPOS DE HIPOTECA E ÍNDICES (pack extra)
+  {
+    id: 'fin_tipo_variable_ventaja',
+    tipo: 'quiz',
+    dificultad: 'media',
+    pregunta: '¿Cuál es la principal ventaja de una hipoteca a tipo variable frente a una fija?',
+    opciones: ['Nunca sube la cuota', 'Suele partir de un diferencial más bajo y la cuota puede bajar si baja el índice de referencia', 'No requiere revisión periódica', 'Elimina el riesgo de subida de tipos'],
+    correcta: 1,
+    explicacion: 'El variable suele ofrecer condiciones iniciales más bajas y te beneficias si el Euríbor baja, aunque también asumes el riesgo de que suba.'
+  },
+  {
+    id: 'fin_irph_definicion',
+    tipo: 'quiz',
+    dificultad: 'dificil',
+    pregunta: '¿Qué es el IRPH (Índice de Referencia de Préstamos Hipotecarios)?',
+    opciones: ['Un impuesto sobre la vivienda', 'Un índice oficial basado en la media de tipos que aplican los bancos a sus hipotecas', 'El tipo de interés que fija el Banco de España a diario', 'Un seguro obligatorio en hipotecas variables'],
+    correcta: 1,
+    explicacion: 'El IRPH lo publica el Banco de España a partir de la media de los tipos que aplican las entidades a sus hipotecas; suele ser más alto y estable que el Euríbor.'
+  },
+  {
+    id: 'fin_comision_amortizacion_variable',
+    tipo: 'quiz',
+    dificultad: 'dificil',
+    pregunta: 'Según la Ley 5/2019, ¿cuál es el límite máximo de comisión por amortización anticipada en una hipoteca variable?',
+    opciones: ['2% durante toda la vida del préstamo', '0,25% los 3 primeros años o 0,15% los 5 primeros (según lo pactado); después, 0%', '5% el primer año', 'No existe límite legal'],
+    correcta: 1,
+    explicacion: 'Pasado ese periodo inicial (3 o 5 años, según lo pactado en el contrato), amortizar anticipadamente en una hipoteca variable no puede tener coste.'
+  },
+  {
+    id: 'fin_comision_amortizacion_fija',
+    tipo: 'quiz',
+    dificultad: 'dificil',
+    pregunta: '¿Y en una hipoteca a tipo fijo, cuál es el límite legal de la comisión por amortización anticipada?',
+    opciones: ['0,25% siempre', '2% los primeros 10 años y 1,5% a partir de entonces', 'No se puede amortizar anticipadamente', '10% del capital pendiente'],
+    correcta: 1,
+    explicacion: 'En las hipotecas a tipo fijo el límite es más alto que en las variables porque el banco asume más riesgo al garantizar un tipo constante.'
+  },
+
+  // RIESGOS Y PROTECCIÓN AL CONSUMIDOR (pack extra)
+  {
+    id: 'riesgo_vencimiento_anticipado',
+    tipo: 'quiz',
+    dificultad: 'dificil',
+    pregunta: '¿Cuántas cuotas impagadas permiten al banco declarar el vencimiento anticipado en la primera mitad del plazo del préstamo?',
+    opciones: ['1 cuota', '3 cuotas', '12 cuotas (o el 3% del capital concedido)', '36 cuotas'],
+    correcta: 2,
+    explicacion: 'La Ley 5/2019 exige un impago equivalente al 3% del capital (mínimo 12 cuotas) en la primera mitad del préstamo, o al 7% (15 cuotas) en la segunda mitad, además de un requerimiento previo de pago.'
+  },
+  {
+    id: 'riesgo_interes_demora_limite',
+    tipo: 'quiz',
+    dificultad: 'dificil',
+    pregunta: '¿Cuál es el límite legal del interés de demora en una hipoteca sobre vivienda?',
+    opciones: ['El interés remuneratorio pactado más 3 puntos porcentuales', 'El triple del interés legal del dinero sin más límite', 'No tiene límite legal', 'Siempre un 20% fijo'],
+    correcta: 0,
+    explicacion: 'La Ley 5/2019 fija el interés de demora como el interés remuneratorio pactado más 3 puntos porcentuales, y solo puede aplicarse sobre el capital vencido e impagado.'
+  },
+  {
+    id: 'riesgo_ejecucion_hipotecaria',
+    tipo: 'quiz',
+    dificultad: 'media',
+    pregunta: '¿Qué es la ejecución hipotecaria?',
+    opciones: ['Un trámite voluntario para bajar la cuota', 'El procedimiento judicial por el que el banco reclama la deuda y puede llegar a subastar la vivienda tras un impago grave', 'La firma de la escritura ante notario', 'Un tipo de seguro de vida'],
+    correcta: 1,
+    explicacion: 'Se inicia tras el vencimiento anticipado si el impago persiste; el inmueble puede subastarse para cobrar la deuda pendiente.'
+  },
+  {
+    id: 'otros_hipoteca_inversa',
+    tipo: 'quiz',
+    dificultad: 'dificil',
+    pregunta: '¿Qué es una hipoteca inversa?',
+    opciones: ['Un préstamo para invertir en bolsa', 'Un producto para mayores de 65 años (u otros colectivos) que reciben dinero usando su vivienda como garantía, sin pagar cuotas en vida', 'Una hipoteca sin intereses', 'Un tipo de subrogación'],
+    correcta: 1,
+    explicacion: 'Regulada en la Ley 41/2007. El titular sigue viviendo en la casa y la deuda se salda, normalmente, tras su fallecimiento (habitualmente vendiendo el inmueble).'
   },
 ];
 

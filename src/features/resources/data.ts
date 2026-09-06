@@ -34,7 +34,7 @@ export const dictionaryCategories = [
         utility: 'Si el BCE sube este tipo, los bancos suelen subir el TIN de las hipotecas. Afecta tanto a hipotecas nuevas (fijas y variables) como a las revisiones de las variables existentes.',
         importance: 'Una subida encarece las cuotas de hipotecas variables. Puede hacer que las nuevas hipotecas fijas se ofrezcan con tipos más altos.',
         example: 'Si el tipo de referencia sube, un banco podría ofrecer una hipoteca fija al 3% en lugar del 2,5% anterior.',
-        notes: 'Valor actual: 2,40% (Fuente: datosmacro.expansion.com, Abril 2025)'
+        notes: 'Valor de referencia (tipo de operaciones principales de financiación): 2,40% (BCE, agosto de 2026). Cambia en cada reunión del BCE (aprox. cada 6-8 semanas); consulta el dato actualizado en bde.es o ecb.europa.eu.'
       },
       {
         id: 'euribor',
@@ -44,6 +44,24 @@ export const dictionaryCategories = [
         importance: 'Determina directamente tu cuota en una hipoteca variable. Si sube, pagas más; si baja, pagas menos. Es sensible a la economía y a las decisiones del BCE.',
         example: 'Hipoteca: Euríbor 12m + 1%. Si Euríbor = 2,5%, TIN = 3,5%. Si Euríbor sube a 3%, TIN = 4%.',
         notes: 'Consulta valores en euribor-rates.eu o Banco de España. Cambia según el entorno económico.'
+      },
+      {
+        id: 'hipoteca-fija-variable-mixta',
+        term: 'Hipoteca fija, variable y mixta',
+        definition: 'Son los tres tipos básicos de hipoteca según cómo se calcula el interés: fija (TIN constante toda la vida del préstamo), variable (ligada a un índice como el Euríbor más un diferencial) y mixta (un tramo inicial a tipo fijo y el resto a variable).',
+        utility: 'Fija: la cuota no cambia nunca, aunque suele partir de un TIN algo más alto que el inicial de una variable. Variable: TIN = índice de referencia + diferencial pactado; se revisa cada 6 o 12 meses según el contrato, por lo que la cuota puede subir o bajar. Mixta: combina ambas, con unos años iniciales de estabilidad (normalmente entre 3 y 10) y después pasa a variable.',
+        importance: 'Elegir el tipo adecuado depende de tu tolerancia al riesgo, el plazo del préstamo y el momento del ciclo de tipos de interés. La fija da certeza para presupuestar a largo plazo; la variable puede salir más barata si los tipos bajan, pero expone a subidas de cuota.',
+        example: 'Hipoteca fija al 3% TIN: pagas siempre la misma cuota. Hipoteca variable Euríbor + 0,80%: si el Euríbor está al 3%, tu TIN será 3,80% y cambiará en cada revisión. Hipoteca mixta: 3 años al 2,8% fijo y, después, Euríbor + 0,75%.',
+        notes: 'En los últimos años buena parte de las hipotecas firmadas en España han sido a tipo fijo, aunque la proporción varía según el ciclo de tipos del BCE. Compara siempre la cuota y el coste total en cada escenario antes de decidir.'
+      },
+      {
+        id: 'irph',
+        term: 'IRPH (Índice de Referencia de Préstamos Hipotecarios)',
+        definition: 'Índice oficial, publicado por el Banco de España, calculado a partir de la media de los tipos de interés que las entidades aplican a sus hipotecas. Es una alternativa al Euríbor para hipotecas variables.',
+        utility: 'Se usa igual que el Euríbor: TIN = IRPH + diferencial. Suele ser más alto que el Euríbor, pero varía menos de un mes a otro, por lo que ofrece cuotas más estables aunque, en general, algo más caras a medio plazo.',
+        importance: 'Si tienes o te ofrecen una hipoteca referenciada a IRPH, compara siempre con lo que pagarías con Euríbor. Muchas hipotecas con IRPH han sido objeto de reclamaciones judiciales por falta de transparencia en su comercialización.',
+        example: 'Con un IRPH del 3,2% y diferencial del 0,25%, tu TIN sería 3,45%, frente a, por ejemplo, un 3,25% con Euríbor 12m + 0,80% en el mismo momento.',
+        notes: 'Desde 2013 solo se publica el "IRPH conjunto de entidades" (se eliminaron el IRPH cajas y el IRPH bancos). Hoy es residual en hipotecas nuevas: casi todas las entidades ofrecen Euríbor o tipo fijo. Si crees que la tuya no se comercializó con transparencia, consúltalo con un abogado.'
       }
     ]
   },
@@ -76,6 +94,15 @@ export const dictionaryCategories = [
         importance: 'Amortizar anticipadamente te permite ahorrar intereses a largo plazo o reducir tu carga financiera mensual.',
         example: 'Tienes una hipoteca y recibes un dinero extra. Haces una amortización parcial de 10.000€. Puedes elegir mantener la cuota y acabar antes, o bajar la cuota y mantener el plazo.',
         notes: 'Revisa si tu hipoteca tiene comisión por amortización anticipada. Si los tipos de interés son muy bajos, a veces compensa más invertir el dinero que amortizar.'
+      },
+      {
+        id: 'comision-amortizacion-anticipada',
+        term: 'Comisión por amortización anticipada',
+        definition: 'Cantidad que el banco puede cobrarte por devolver capital antes de lo pactado (amortización parcial o total), como compensación por la pérdida financiera que le genera.',
+        utility: 'La Ley 5/2019 fija topes máximos según el tipo de interés: en hipotecas variables, 0,25% del capital amortizado si ocurre en los 3 primeros años (o 0,15% si ocurre en los 5 primeros, según lo que el banco elija ofrecer en el contrato) y 0% a partir de entonces. En hipotecas fijas, 2% en los primeros 10 años y 1,5% después. Además, el banco solo puede cobrarla si demuestra que sufre una pérdida financiera real.',
+        importance: 'Cuanto más baja sea esta comisión, más barato te resultará adelantar pagos o cambiar de hipoteca (subrogación) en el futuro. Revísala siempre en la FEIN antes de firmar.',
+        example: 'Amortizas 20.000€ de una hipoteca variable en el segundo año: como máximo, el banco podría cobrarte 0,25% (50€) o 0,15% (30€), según lo pactado, y solo si prueba una pérdida real; nunca más de eso.',
+        notes: 'Estos límites se aplican a hipotecas firmadas desde el 16 de junio de 2019; los contratos anteriores pueden tener condiciones distintas (revisa tu escritura o valora una novación o subrogación para mejorarlas).'
       },
       {
         id: 'carencia',
@@ -190,7 +217,7 @@ export const dictionaryCategories = [
         id: 'itp',
         term: 'Impuesto de Transmisiones Patrimoniales (ITP)',
         definition: 'Impuesto que paga el comprador al adquirir una vivienda de segunda mano (o cualquier bien usado).',
-        utility: 'Es un porcentaje sobre el precio de compraventa (o el valor de referencia de Hacienda, si es mayor). El porcentaje varía según la Comunidad Autónoma (entre 4% y 11% aprox.). Se paga una sola vez, tras la firma de la escritura.',
+        utility: 'Es un porcentaje sobre el precio de compraventa (o sobre el "valor de referencia" que publica el Catastro, si es mayor). El porcentaje varía según la Comunidad Autónoma (entre el 4% y el 13% aprox., con tipos reducidos para jóvenes, familias numerosas o VPO). Se liquida en el plazo que fije tu C.A. (habitualmente unos 30 días hábiles) tras la firma de la escritura.',
         importance: 'Es uno de los gastos más importantes al comprar una vivienda usada. Debes tenerlo en cuenta en tu presupuesto.',
         example: 'Compras un piso de segunda mano por 200.000€ en una C.A. con un ITP del 8%. Pagarás 16.000€ de ITP.',
         notes: 'Si compras vivienda nueva, pagas IVA (10% o 4% VPO) en lugar de ITP. Consulta el tipo exacto de ITP en tu C.A., ya que hay tipos reducidos para jóvenes, familias numerosas, etc.'
@@ -267,6 +294,33 @@ export const dictionaryCategories = [
         importance: 'Si firmaste tu hipoteca variable antes de 2013-2015, revisa si la tenía. Si la tuvo y fue declarada nula (o la eliminaste por acuerdo), puedes reclamar la devolución de lo pagado de más. Las hipotecas nuevas ya no suelen incluirla o, si lo hacen, debe ser negociada y transparente.',
         example: 'Tenías suelo del 2,5%. El Euríbor + diferencial bajó al 1% durante años, pero tú seguiste pagando el 2,5%. Podrías reclamar la diferencia.',
         notes: 'Aunque la Ley Hipotecaria de 2019 no las prohíbe expresamente, la exigencia de transparencia hace muy difícil su inclusión válida hoy en día. Consulta con un abogado si crees que te afecta.'
+      },
+      {
+        id: 'vencimiento-anticipado',
+        term: 'Vencimiento anticipado',
+        definition: 'Cláusula que permite al banco dar por vencida toda la hipoteca y reclamar el pago total de la deuda pendiente cuando el impago del prestatario alcanza ciertos umbrales legales.',
+        utility: 'Según la Ley 5/2019 (art. 24), el banco solo puede activarlo si el impago equivale al 3% del capital concedido (mínimo 12 cuotas) durante la primera mitad del plazo pactado, o al 7% (mínimo 15 cuotas) en la segunda mitad, y tras requerir el pago por escrito dando al menos un mes de plazo.',
+        importance: 'Es el paso previo a una posible ejecución hipotecaria. Si tienes dificultades de pago, contactar cuanto antes con el banco (novación, carencia, refinanciación) puede evitar llegar a este punto.',
+        example: 'Hipoteca de 150.000€ con 5 años transcurridos de 30 (primera mitad del plazo): el banco podría iniciar el vencimiento anticipado si dejas de pagar 12 cuotas (o el 3% del capital, lo que se alcance primero) y no regularizas tras el requerimiento.',
+        notes: 'Estos umbrales solo se aplican a hipotecas firmadas desde el 16 de junio de 2019 sobre vivienda de personas físicas; las anteriores pueden tener cláusulas distintas, revisadas caso a caso por los tribunales.'
+      },
+      {
+        id: 'interes-demora',
+        term: 'Interés de demora',
+        definition: 'Interés adicional que se aplica sobre las cuotas impagadas de la hipoteca, como penalización por el retraso en el pago.',
+        utility: 'La Ley 5/2019 (art. 25) limita el interés de demora al interés remuneratorio pactado (el TIN) más 3 puntos porcentuales, y solo puede calcularse sobre el capital vencido y no pagado (nunca sobre el capital pendiente que aún no vence, ni generar intereses sobre intereses).',
+        importance: 'Conocer este límite te protege frente a cláusulas abusivas: antes de esta ley, algunos contratos incluían intereses de demora mucho más altos, que los tribunales declararon nulos en numerosos casos.',
+        example: 'Si tu TIN es del 3% y dejas una cuota impagada, el interés de demora máximo sería del 6% anual sobre el importe de esa cuota, no sobre el resto de la deuda pendiente.',
+        notes: 'Si tu hipoteca es anterior a 2019 y el interés de demora pactado supera el remuneratorio más 2 puntos (doctrina previa del Tribunal Supremo), podría ser abusivo y reclamable.'
+      },
+      {
+        id: 'ejecucion-hipotecaria',
+        term: 'Ejecución hipotecaria',
+        definition: 'Procedimiento judicial mediante el cual el banco reclama el cobro de la deuda hipotecaria impagada, pudiendo llegar a la subasta de la vivienda para satisfacer lo que se debe.',
+        utility: 'Se inicia tras el vencimiento anticipado si la deuda sigue sin pagarse. El juzgado saca la vivienda a subasta pública (con un valor de referencia fijado en la escritura) y, con lo obtenido, se cobra el banco; si sobra dinero se devuelve al propietario, y si falta, la deuda pendiente se sigue reclamando.',
+        importance: 'Es la última fase de un impago prolongado y tiene consecuencias graves: pérdida de la vivienda y, si la subasta no cubre toda la deuda, seguir debiendo dinero al banco. Existen mecanismos de protección para deudores vulnerables (Código de Buenas Prácticas, dación en pago, alquiler social).',
+        example: 'Tras meses de impago y el vencimiento anticipado, el banco presenta una demanda de ejecución hipotecaria. Si nadie puja en la subasta, el banco puede adjudicarse la vivienda por un porcentaje legal mínimo del valor de tasación.',
+        notes: 'Si te encuentras en esta situación, existen ayudas: el Código de Buenas Prácticas Bancarias, los servicios de intermediación hipotecaria de tu Comunidad Autónoma y las organizaciones de consumidores. Actuar pronto, antes de la demanda, da más opciones de negociación.'
       }
     ]
   },
@@ -349,6 +403,15 @@ export const dictionaryCategories = [
         importance: 'Si eres titular del derecho (ej. inquilino): Te da preferencia para comprar la vivienda si el dueño la vende. Si eres comprador: Verifica si la vivienda está sujeta a algún derecho de tanteo/retracto que pueda afectar tu compra. Si eres vendedor: Debes respetar estos derechos notificando correctamente para evitar problemas legales.',
         example: 'Eres inquilino y tu casero decide vender el piso. Tiene que notificarte primero las condiciones por si quieres comprarlo tú (tanteo). Si lo vende a otro sin notificarte, podrías ejercer el retracto.',
         notes: 'Los plazos para ejercer estos derechos son cortos (normalmente 30 días para tanteo, 30 días para retracto desde la notificación o inscripción). Regulado en Código Civil y Ley de Arrendamientos Urbanos.'
+      },
+      {
+        id: 'hipoteca-inversa',
+        term: 'Hipoteca inversa',
+        definition: 'Préstamo hipotecario pensado para personas mayores de 65 años (o personas dependientes o con discapacidad reconocida igual o superior al 33%) que permite obtener dinero, de una vez o en pagos periódicos, usando la vivienda habitual como garantía, sin tener que devolver nada mientras viva el titular.',
+        utility: 'El titular sigue siendo propietario y puede continuar viviendo en la casa. La deuda (capital recibido más intereses) se liquida normalmente al fallecimiento, cuando los herederos deciden si pagan la deuda y se quedan con la vivienda, o si la venden para saldarla con el banco.',
+        importance: 'Es una vía para complementar ingresos en la jubilación sin perder la vivienda en vida, pero implica que los herederos reciban menos patrimonio (o nada) si no cancelan la deuda. Es un producto complejo: la ley exige asesoramiento independiente y gratuito antes de contratarlo.',
+        example: 'Una persona de 75 años con una vivienda valorada en 200.000€ contrata una hipoteca inversa y recibe una renta mensual. Al fallecer, sus hijos pueden pagar la deuda acumulada y quedarse la casa, o venderla y repartirse lo que sobre tras saldar la deuda con el banco.',
+        notes: 'Regulada por la Ley 41/2007. No debe confundirse con la venta con reserva de usufructo (ver Nuda propiedad y usufructo): en la hipoteca inversa sigues siendo pleno propietario, solo hipotecas la vivienda.'
       }
     ]
   }
@@ -448,7 +511,7 @@ export const buyingGuideSteps = [
         },
         {
           title: 'Negocia comisiones de amortización',
-          description: 'Cuanto más bajas, más flexibilidad tendrás para adelantar pagos sin penalización. Por ley se establece el 2%, tanto el amortización parcial como total, pero son negociables.'
+          description: 'Cuanto más bajas, más flexibilidad tendrás para adelantar pagos sin penalización. La ley marca topes máximos distintos según el tipo de interés: en hipoteca variable, 0,25% (3 primeros años) o 0,15% (5 primeros) y 0% después; en hipoteca fija, 2% (primeros 10 años) y 1,5% a partir de entonces. Muchos bancos ya ofrecen 0% desde el principio para ser competitivos: pregúntalo siempre.'
         },
         {
           title: 'Mantén tu perfil estable',
@@ -482,7 +545,7 @@ export const buyingGuideSteps = [
         },
         {
           title: 'Gastos e impuestos',
-          description: 'Quién paga plusvalía, derramas aprobadas, IBI prorrateado, honorarios de agencia. '
+          description: 'Quién paga plusvalía, derramas aprobadas, IBI prorrateado, honorarios de agencia.'
         },
         {
           title: 'Documentación previa recomendada',
